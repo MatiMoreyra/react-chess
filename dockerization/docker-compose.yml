@@ -1,0 +1,9 @@
+version: "2"
+services:
+  node:
+    image: "node:10"
+    volumes:
+      - ..:/workspace
+    expose:
+      - "3000"
+    tty: true
