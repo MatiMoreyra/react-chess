@@ -25,6 +25,9 @@ export class DummyChessEngine extends AbstractChessEngine {
   }
 
   public move(move: Move): boolean {
+    if (move.destination.equals(move.source)) {
+       return false;
+    }
     this._pieces[move.destination.row][move.destination.column] = this._pieces[
       move.source.row
     ][move.source.column];
