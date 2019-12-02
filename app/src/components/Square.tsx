@@ -5,6 +5,7 @@ import { AbstractPiece } from "../game-engine/AbstractPiece";
 interface SquareProps {
   piece: AbstractPiece | null;
   background: string;
+  onClick: () => void;
 }
 
 const squareStyle: React.CSSProperties = {
@@ -20,7 +21,7 @@ export const Square: React.FC<SquareProps> = props => {
     background: props.background
   };
   return (
-    <button style={style}>
+    <button style={style} onClick={props.onClick}>
       {props.piece == null ? "" : props.piece.name()}
     </button>
   );
