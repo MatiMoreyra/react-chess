@@ -28,4 +28,8 @@ export class ChessSquare {
     let columnLabel = (this.column + 1).toString();
     return rowLabel + columnLabel;
   }
+
+  equals(other: ChessSquare): boolean {
+    return this._row === other.row && this._column === other.column;
+  }
 }
