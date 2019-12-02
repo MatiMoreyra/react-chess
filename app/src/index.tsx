@@ -1,10 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { ChessGame } from './components/ChessGame';
+import { DummyChessEngine } from './game-engine/dummy-engine/DummyChessEngine';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+let engine = new DummyChessEngine();
+
+ReactDOM.render(<ChessGame engine={engine} />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
