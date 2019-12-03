@@ -3,6 +3,7 @@ import { AbstractPiece, PieceColor } from "../AbstractPiece";
 import { King } from "./pieces/King";
 import { ChessBoard } from "../ChessBoard";
 import { ChessSquare } from "../ChessSquare";
+import { Rook } from "./pieces/Rook";
 
 export class DummyChessEngine extends AbstractChessEngine {
   private _pieces: Array<Array<AbstractPiece | null>>;
@@ -13,7 +14,8 @@ export class DummyChessEngine extends AbstractChessEngine {
     for (let row = 0; row < 8; row++) {
       this._pieces[row] = new Array<AbstractPiece | null>(8).fill(null);
     }
-    this._pieces[0][0] = new King(PieceColor.White);
+    this._pieces[3][3] = new King(PieceColor.White);
+    this._pieces[3][4] = new Rook(PieceColor.White);
     this._history = new Array<Move>();
   }
 

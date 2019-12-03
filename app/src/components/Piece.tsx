@@ -20,6 +20,9 @@ function pieceCharacter(piece: AbstractPiece | null): string {
     case "King":
       charCode = 9812;
       break;
+    case "Rook":
+      charCode = 9814;
+      break;
     default:
       break;
   }
