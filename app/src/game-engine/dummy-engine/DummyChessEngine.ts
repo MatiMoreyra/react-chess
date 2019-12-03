@@ -4,6 +4,7 @@ import { King } from "./pieces/King";
 import { ChessBoard } from "../ChessBoard";
 import { ChessSquare } from "../ChessSquare";
 import { Rook } from "./pieces/Rook";
+import { Pawn } from "./pieces/Pawn";
 
 export class DummyChessEngine extends AbstractChessEngine {
   private _pieces: Array<Array<AbstractPiece | null>>;
@@ -16,6 +17,8 @@ export class DummyChessEngine extends AbstractChessEngine {
     }
     this._pieces[3][3] = new King(PieceColor.White);
     this._pieces[3][4] = new Rook(PieceColor.White);
+    this._pieces[7][4] = new Pawn(PieceColor.White);
+    this._pieces[3][5] = new Pawn(PieceColor.Black);
     this._history = new Array<Move>();
   }
 

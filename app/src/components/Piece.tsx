@@ -1,6 +1,6 @@
 import React from "react";
 import "../index.css";
-import { AbstractPiece } from "../game-engine/AbstractPiece";
+import { AbstractPiece, PieceColor } from "../game-engine/AbstractPiece";
 
 interface PieceProps {
   piece: AbstractPiece | null;
@@ -23,8 +23,14 @@ function pieceCharacter(piece: AbstractPiece | null): string {
     case "Rook":
       charCode = 9814;
       break;
+    case "Pawn":
+      charCode = 9817;
+      break;
     default:
       break;
+  }
+  if (piece.color === PieceColor.Black) {
+    charCode += 6;
   }
   return String.fromCharCode(charCode);
 }
