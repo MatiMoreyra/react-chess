@@ -7,7 +7,7 @@ interface PieceProps {
 }
 
 const pieceStyle: React.CSSProperties = {
-  fontSize: "4vw",
+  fontSize: "8vmin",
   margin: "0"
 };
 
@@ -20,8 +20,17 @@ function pieceCharacter(piece: AbstractPiece | null): string {
     case "King":
       charCode = 9812;
       break;
+    case "Queen":
+      charCode = 9813;
+      break;
     case "Rook":
       charCode = 9814;
+      break;
+    case "Bishop":
+      charCode = 9815;
+      break;
+    case "Knight":
+      charCode = 9816;
       break;
     case "Pawn":
       charCode = 9817;
