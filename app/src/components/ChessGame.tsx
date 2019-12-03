@@ -48,8 +48,8 @@ export class ChessGame extends React.Component<ChessGameProps, ChessGameState> {
       };
       if (this.props.engine.isValidMove(move)) {
         this.props.engine.move(move);
-        this.setState({ sourceSquare: null });
       }
+      this.setState({ sourceSquare: null });
     }
   };
 
