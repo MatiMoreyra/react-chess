@@ -1,6 +1,7 @@
 import React from "react";
 import "../index.css";
 import { AbstractPiece } from "../game-engine/AbstractPiece";
+import { Piece } from "./Piece";
 
 interface SquareProps {
   piece: AbstractPiece | null;
@@ -12,7 +13,8 @@ const squareStyle: React.CSSProperties = {
   height: "12.5%",
   width: "12.5%",
   float: "left",
-  border: "none"
+  border: "none",
+  padding: "0",
 };
 
 export const Square: React.FC<SquareProps> = props => {
@@ -22,7 +24,7 @@ export const Square: React.FC<SquareProps> = props => {
   };
   return (
     <button style={style} onClick={props.onClick}>
-      {props.piece == null ? "" : props.piece.name()}
+      <Piece piece={props.piece}></Piece>
     </button>
   );
 };
