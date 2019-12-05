@@ -14,6 +14,9 @@ export class Pawn extends AbstractPiece {
     if (this.checkCaptureMove(source, destination, board)) {
       return true;
     }
+    if (this.checkLongMove(source, destination, board)) {
+      return true;
+    }
     return false;
   }
 
@@ -81,6 +84,41 @@ export class Pawn extends AbstractPiece {
       }
     }
 
+    return false;
+  }
+
+  private checkLongMove(
+    source: ChessSquare,
+    destination: ChessSquare,
+    board: ChessBoard
+  ): boolean {
+    let validRow: number = 0;
+    let validDy: number = 0;
+    switch (this.color) {
+      case PieceColor.White:
+        validRow = 6;
+        validDy = -2; // From bottom to top
+        break;
+
+      case PieceColor.Black:
+        validRow = 1;
+        validDy = 2; // From top to bottom
+        break;
+    }
+
+    let dy = destination.row - source.row;
+    let dx = destination.column - source.column;
+
+    if (dy === validDy && source.row === validRow && Math.abs(dx) === 0) {
+      // Can move if the destination square is empty and can advance to the next square.
+      let pieceAtDestination = board.pieceAt(destination);
+      let pieceAtNextSquare = board.pieceAt(
+        new ChessSquare(validRow + validDy / 2, source.column)
+      );
+      if (pieceAtDestination === null && pieceAtNextSquare === null) {
+        return true;
+      }
+    }
     return false;
   }
 }
