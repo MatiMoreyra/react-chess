@@ -9,7 +9,7 @@ export class DummyChessEngine extends AbstractChessEngine {
   private _history: Array<Move>;
   constructor() {
     super();
-    let pieces = parseFen("rnbqkbnr/pp1pp1pp/5B2/2p1P1p1/2P5/2N1N3/PP1P1PPP/R2QKB1R");
+    let pieces = parseFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
     if (pieces != null) {
       this._pieces = pieces;
     } else {
