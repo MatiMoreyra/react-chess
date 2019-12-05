@@ -30,6 +30,7 @@ export class DummyChessEngine extends AbstractChessEngine {
     if (this.isValidMove(move)) {
       this.setPiece(move.destination, this.pieceAt(move.source));
       this.setPiece(move.source, null);
+      this._history.push(move);
       return true;
     }
     return false;
