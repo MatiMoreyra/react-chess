@@ -12,7 +12,7 @@ interface BoardProps {
 const boardStyle: React.CSSProperties = {
   height: "80vmin",
   width: "80vmin",
-  borderRadius: "2px",
+  borderRadius: "5px",
   overflow: "hidden"
 };
 

@@ -3,6 +3,7 @@ import React from "react";
 import { AbstractChessEngine, Move } from "../game-engine/AbstractChessEngine";
 import { ChessSquare } from "../game-engine/ChessSquare";
 import { PieceColor } from "../game-engine/AbstractPiece";
+import { Centered } from "./utils/Centered";
 
 interface ChessGameProps {
   engine: AbstractChessEngine;
@@ -12,6 +13,11 @@ interface ChessGameState {
   sourceSquare: ChessSquare | null;
 }
 
+const gameStyle: React.CSSProperties = {
+  backgroundImage: "linear-gradient(-90deg, #643722, #bf9c77, #643722)",
+  width: "100vw",
+  height: "100vh"
+}
 export class ChessGame extends React.Component<ChessGameProps, ChessGameState> {
   constructor(p: ChessGameProps) {
     super(p);
@@ -23,11 +29,15 @@ export class ChessGame extends React.Component<ChessGameProps, ChessGameState> {
   render() {
     let board = this.props.engine.getChessBoard();
     return (
-      <Board
-        board={board}
-        onSquareClick={this.handleSquareClick}
-        highlightedSquares={this.highlightedSquares()}
-      ></Board>
+      <div style={gameStyle}>
+        <Centered>
+          <Board
+            board={board}
+            onSquareClick={this.handleSquareClick}
+            highlightedSquares={this.highlightedSquares()}
+          ></Board>
+        </Centered>
+      </div>
     );
   }
 
