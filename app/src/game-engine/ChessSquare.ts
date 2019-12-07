@@ -24,9 +24,9 @@ export class ChessSquare {
   }
 
   get label(): string {
-    let rowLabel = String.fromCharCode("a".charCodeAt(0) + this.row);
-    let columnLabel = (this.column + 1).toString();
-    return rowLabel + columnLabel;
+    let columnLabel = String.fromCharCode("a".charCodeAt(0) + this.column);
+    let rowLabel = (8 - this.row).toString();
+    return columnLabel + rowLabel;
   }
 
   equals(other: ChessSquare): boolean {

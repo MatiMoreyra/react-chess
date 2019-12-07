@@ -9,8 +9,8 @@ it('Constructor throws with invalid positions', () => {
 
 it('Label', () => {
   let square = new ChessSquare(0,0);
-  expect(square.label).toBe("a1");
+  expect(square.label).toBe("a8");
 
   square = new ChessSquare(2,2);
-  expect(square.label).toBe("c3");
+  expect(square.label).toBe("c6");
 });
