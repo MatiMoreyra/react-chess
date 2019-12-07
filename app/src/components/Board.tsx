@@ -12,8 +12,10 @@ interface BoardProps {
 const boardStyle: React.CSSProperties = {
   height: "80vmin",
   width: "80vmin",
+  border: "none",
   borderRadius: "5px",
-  overflow: "hidden"
+  overflow: "hidden",
+  boxShadow: "5px 5px 5px rgba(0, 0, 0, 0.5)",
 };
 
 const darkSquareColor: string = "#ab5e3a";
