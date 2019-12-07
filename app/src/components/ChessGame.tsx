@@ -17,7 +17,8 @@ const gameStyle: React.CSSProperties = {
   backgroundImage: "linear-gradient(-90deg, #643722, #bf9c77, #643722)",
   width: "100vw",
   height: "100vh"
-}
+};
+
 export class ChessGame extends React.Component<ChessGameProps, ChessGameState> {
   constructor(p: ChessGameProps) {
     super(p);
