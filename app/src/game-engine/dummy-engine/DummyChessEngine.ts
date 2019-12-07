@@ -7,6 +7,7 @@ import { parseFen } from "./FenParser";
 export class DummyChessEngine extends AbstractChessEngine {
   private _pieces: Array<Array<AbstractPiece | null>>;
   private _history: Array<Move>;
+  private _whoPlays: PieceColor;
   constructor() {
     super();
     let pieces = parseFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
@@ -16,6 +17,7 @@ export class DummyChessEngine extends AbstractChessEngine {
       throw new Error("Invalid fen");
     }
     this._history = new Array<Move>();
+    this._whoPlays = PieceColor.White;
   }
 
   public getChessBoard(): ChessBoard {
@@ -31,6 +33,7 @@ export class DummyChessEngine extends AbstractChessEngine {
       this.setPiece(move.destination, this.pieceAt(move.source));
       this.setPiece(move.source, null);
       this._history.push(move);
+      this.toggleTurn();
       return true;
     }
     return false;
@@ -54,7 +57,7 @@ export class DummyChessEngine extends AbstractChessEngine {
   }
 
   public whoPlays(): PieceColor {
-    return PieceColor.White;
+    return this._whoPlays;
   }
 
   private pieceAt(square: ChessSquare): AbstractPiece | null {
@@ -63,5 +66,10 @@ export class DummyChessEngine extends AbstractChessEngine {
 
   private setPiece(square: ChessSquare, piece: AbstractPiece | null) {
     this._pieces[square.row][square.column] = piece;
+  }
+
+  private toggleTurn() {
+    this._whoPlays =
+      this._whoPlays === PieceColor.White ? PieceColor.Black : PieceColor.White;
   }
 }
