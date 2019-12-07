@@ -6,44 +6,32 @@ interface PieceProps {
   piece: AbstractPiece | null;
 }
 
-const pieceStyle: React.CSSProperties = {
-  fontSize: "8vmin",
-  margin: "0"
+const style: React.CSSProperties = {
+  height: "80%",
+  width: "80%",
+  border: "none"
 };
 
-function pieceCharacter(piece: AbstractPiece | null): string {
+function pieceImage(piece: AbstractPiece | null): string {
   if (piece === null) {
     return "";
   }
-  let charCode: number = 0;
-  switch (piece.name()) {
-    case "King":
-      charCode = 9812;
-      break;
-    case "Queen":
-      charCode = 9813;
-      break;
-    case "Rook":
-      charCode = 9814;
-      break;
-    case "Bishop":
-      charCode = 9815;
-      break;
-    case "Knight":
-      charCode = 9816;
-      break;
-    case "Pawn":
-      charCode = 9817;
-      break;
-    default:
-      break;
-  }
+
+  let color = "";
   if (piece.color === PieceColor.Black) {
-    charCode += 6;
+    color = "black";
+  } else {
+    color = "white";
   }
-  return String.fromCharCode(charCode);
+
+  let name = piece.name().toLowerCase();
+
+  return "pieces/" + name + "-" + color + ".png";
 }
 
 export const Piece: React.FC<PieceProps> = props => {
-  return <p style={pieceStyle}>{pieceCharacter(props.piece)}</p>;
+  if (props.piece == null) {
+    return <div></div>;
+  }
+  return <img src={pieceImage(props.piece)} alt={""} style={style}></img>;
 };
