@@ -13,18 +13,12 @@ export class Knight extends AbstractPiece {
     if (pieceAtDestination != null && pieceAtDestination.color === this.color) {
       return false;
     }
-  
+
     let dx = destination.column - source.column;
     let dy = destination.row - source.row;
-  
-    if (Math.abs(dx) === 1 && Math.abs(dy) === 2) {
-      return true;
-    }
-    if (Math.abs(dx) === 2 && Math.abs(dy) === 1) {
-      return true;
-    }
-  
-    return false;
+
+    // Cool solution
+    return Math.abs(dx * dy) === 2;
   }
 
   public name(): string {
