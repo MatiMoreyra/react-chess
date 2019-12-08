@@ -50,7 +50,7 @@ export class DummyChessEngine extends AbstractChessEngine {
     if (piece.color !== this.whoPlays()) {
       return false;
     }
-    if (piece.canMove(move.source, move.destination, this.getChessBoard())) {
+    if (piece.canMove(move, this.getChessBoard())) {
       return true;
     }
     return false;

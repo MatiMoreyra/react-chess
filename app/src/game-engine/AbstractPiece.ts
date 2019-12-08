@@ -1,5 +1,5 @@
-import { ChessSquare } from "./ChessSquare";
 import { ChessBoard } from "./ChessBoard";
+import { Move } from "./AbstractChessEngine";
 
 export enum PieceColor {
   Black,
@@ -16,11 +16,7 @@ export abstract class AbstractPiece {
     return this._color;
   }
 
-  public abstract canMove(
-    source: ChessSquare,
-    destination: ChessSquare,
-    board: ChessBoard
-  ): boolean;
+  public abstract canMove(move: Move, board: ChessBoard): boolean;
 
   public abstract name(): string;
 }

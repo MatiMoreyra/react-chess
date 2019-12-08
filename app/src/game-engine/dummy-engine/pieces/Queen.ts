@@ -1,8 +1,8 @@
 import { AbstractPiece, PieceColor } from "../../AbstractPiece";
-import { ChessSquare } from "../../ChessSquare";
 import { ChessBoard } from "../../ChessBoard";
 import { Bishop } from "./Bishop";
 import { Rook } from "./Rook";
+import { Move } from "../../AbstractChessEngine";
 
 export class Queen extends AbstractPiece {
   private _bishop: Bishop;
@@ -14,16 +14,9 @@ export class Queen extends AbstractPiece {
     this._rook = new Rook(color);
   }
 
-  public canMove(
-    source: ChessSquare,
-    destination: ChessSquare,
-    board: ChessBoard
-  ): boolean {
+  public canMove(move: Move, board: ChessBoard): boolean {
     // Combines bishop and rook movement.
-    return (
-      this._bishop.canMove(source, destination, board) ||
-      this._rook.canMove(source, destination, board)
-    );
+    return this._bishop.canMove(move, board) || this._rook.canMove(move, board);
   }
 
   public name(): string {
