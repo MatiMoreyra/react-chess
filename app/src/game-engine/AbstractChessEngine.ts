@@ -11,7 +11,6 @@ export enum GameResult {
 export interface Move {
   source: ChessSquare;
   destination: ChessSquare;
-  playerColor: PieceColor;
 }
 
 export abstract class AbstractChessEngine {

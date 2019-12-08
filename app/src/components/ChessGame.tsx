@@ -2,7 +2,6 @@ import { Board } from "./Board";
 import React from "react";
 import { AbstractChessEngine, Move } from "../game-engine/AbstractChessEngine";
 import { ChessSquare } from "../game-engine/ChessSquare";
-import { PieceColor } from "../game-engine/AbstractPiece";
 import { Centered } from "./utils/Centered";
 
 interface ChessGameProps {
@@ -54,8 +53,7 @@ export class ChessGame extends React.Component<ChessGameProps, ChessGameState> {
     } else {
       let move: Move = {
         source: this.state.sourceSquare,
-        destination: new ChessSquare(row, col),
-        playerColor: PieceColor.White
+        destination: new ChessSquare(row, col)
       };
       if (this.props.engine.isValidMove(move)) {
         this.props.engine.move(move);
