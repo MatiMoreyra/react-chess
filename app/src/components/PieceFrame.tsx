@@ -1,9 +1,9 @@
 import React from "react";
 import "../index.css";
-import { AbstractPiece, PieceColor } from "../game-engine/AbstractPiece";
+import { Piece, PieceColor } from "../game-engine/Piece";
 
 interface PieceProps {
-  piece: AbstractPiece | null;
+  piece: Piece | null;
 }
 
 const style: React.CSSProperties = {
@@ -12,7 +12,7 @@ const style: React.CSSProperties = {
   border: "none"
 };
 
-function pieceImage(piece: AbstractPiece | null): string {
+function pieceImage(piece: Piece | null): string {
   if (piece === null) {
     return "";
   }
@@ -24,12 +24,12 @@ function pieceImage(piece: AbstractPiece | null): string {
     color = "white";
   }
 
-  let name = piece.name().toLowerCase();
+  let name = piece.type.toLowerCase();
 
   return "pieces/" + name + "-" + color + ".png";
 }
 
-export const Piece: React.FC<PieceProps> = props => {
+export const PieceFrame: React.FC<PieceProps> = props => {
   if (props.piece == null) {
     return <div></div>;
   }

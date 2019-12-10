@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 import { ChessGame } from './components/ChessGame';
-import { DummyChessEngine } from './game-engine/dummy-engine/DummyChessEngine';
+import { LocalEngine } from './game-engine/local-engine/LocalEngine';
 
-let engine = new DummyChessEngine();
+let engine = new LocalEngine();
 
 ReactDOM.render(<ChessGame engine={engine} />, document.getElementById('root'));
 

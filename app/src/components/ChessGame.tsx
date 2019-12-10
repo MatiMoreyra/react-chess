@@ -1,15 +1,15 @@
-import { Board } from "./Board";
+import { BoardView } from "./BoardView";
 import React from "react";
-import { AbstractChessEngine, Move } from "../game-engine/AbstractChessEngine";
-import { ChessSquare } from "../game-engine/ChessSquare";
+import { ChessGameEngine, Move } from "../game-engine/ChessGameEngine";
+import { Square } from "../game-engine/Square";
 import { Centered } from "./utils/Centered";
 
 interface ChessGameProps {
-  engine: AbstractChessEngine;
+  engine: ChessGameEngine;
 }
 
 interface ChessGameState {
-  sourceSquare: ChessSquare | null;
+  sourceSquare: Square | null;
 }
 
 const gameStyle: React.CSSProperties = {
@@ -31,11 +31,11 @@ export class ChessGame extends React.Component<ChessGameProps, ChessGameState> {
     return (
       <div style={gameStyle}>
         <Centered>
-          <Board
+          <BoardView
             board={board}
             onSquareClick={this.handleSquareClick}
             highlightedSquares={this.highlightedSquares()}
-          ></Board>
+          ></BoardView>
         </Centered>
       </div>
     );
@@ -44,16 +44,13 @@ export class ChessGame extends React.Component<ChessGameProps, ChessGameState> {
   private handleSquareClick = (row: number, col: number) => {
     console.log(row + "," + col + " clicked");
     if (this.state.sourceSquare == null) {
-      if (
-        this.props.engine.getChessBoard().pieceAt(new ChessSquare(row, col)) !=
-        null
-      ) {
-        this.setState({ sourceSquare: new ChessSquare(row, col) });
+      if (this.props.engine.getChessBoard().pieces[row][col] != null) {
+        this.setState({ sourceSquare: { row: row, column: col } });
       }
     } else {
       let move: Move = {
         source: this.state.sourceSquare,
-        destination: new ChessSquare(row, col)
+        destination: { row: row, column: col }
       };
       if (this.props.engine.isValidMove(move)) {
         this.props.engine.move(move);
@@ -63,7 +60,7 @@ export class ChessGame extends React.Component<ChessGameProps, ChessGameState> {
   };
 
   private highlightedSquares = () => {
-    let squares = new Array<ChessSquare>();
+    let squares = new Array<Square>();
     if (this.state.sourceSquare != null) {
       squares.push(this.state.sourceSquare);
     }
