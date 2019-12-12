@@ -1,6 +1,7 @@
 import { IBoard } from "../IBoard";
 import { IPiece } from "../IPiece";
 import { Square } from "../ISquare";
+import { IMove } from "../ChessGameEngine";
 
 // Class that provides extension methods to manipulate an IBoard
 export class Board implements IBoard {
@@ -15,6 +16,15 @@ export class Board implements IBoard {
 
   public setPiece(square: Square, piece: IPiece | null) {
     this.pieces[square.row][square.column] = piece;
+  }
+
+  /// Moves the piece at move.source to move.destination and sets
+  // the piece at move.source to null.
+  public move(move: IMove) {
+    if (this.getPiece(move.source)) {
+      this.setPiece(move.destination, this.getPiece(move.source));
+      this.setPiece(move.source, null);
+    }
   }
 
   public clone(): Board {
