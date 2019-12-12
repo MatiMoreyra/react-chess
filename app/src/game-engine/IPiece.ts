@@ -12,7 +12,7 @@ export enum PieceType {
   Pawn = "Pawn"
 }
 
-export interface Piece {
-  color: PieceColor;
-  type: PieceType;
+export interface IPiece {
+  readonly color: PieceColor;
+  readonly type: PieceType;
 }

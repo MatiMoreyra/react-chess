@@ -1,46 +1,51 @@
-import { PieceColor } from "../Piece";
-import { Board } from "../Board";
+import { PieceColor } from "../IPiece";
+import { IBoard } from "../IBoard";
 import { parseFen } from "./FenParser";
-import { ChessGameEngine, Move } from "../ChessGameEngine";
+import { ChessGameEngine, IMove } from "../ChessGameEngine";
+import { RulesPipeline } from "./RulesPipeline";
+import { DummyRule } from "./rules/DummyRule";
+import { GameState } from "./GameState";
+import { Board } from "./Board";
 
 export class LocalEngine extends ChessGameEngine {
-  private _board: Board;
-  private _history: Array<Move>;
-  private _whoPlays: PieceColor;
+  private _state: GameState;
+  private _pipeline: RulesPipeline;
   constructor() {
     super();
     let pieces = parseFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
-    if (pieces != null) {
-      this._board = {pieces: pieces};
-    } else {
+    if (pieces == null) {
       throw new Error("Invalid fen");
     }
-    this._history = new Array<Move>();
-    this._whoPlays = PieceColor.White;
+    this._state = new GameState(
+      new Board({ pieces: pieces }),
+      PieceColor.White,
+      new Array<IMove>()
+    );
+    this._pipeline = new RulesPipeline();
+    this._pipeline.push(new DummyRule());
   }
 
-  public getChessBoard(): Board {
-    return this._board;
+  public getChessBoard(): IBoard {
+    return this._state.board;
   }
 
-  public getHistory(): Array<Move> {
-    return this._history;
+  public getHistory(): Array<IMove> {
+    return this._state.history;
   }
 
-  public move(move: Move): boolean {
-      return true;
-  }
-
-  public isValidMove(move: Move): boolean {
+  public move(move: IMove): boolean {
+    let evaluation = this._pipeline.evaluate(move, this._state);
+    if (evaluation.valid && evaluation.nextState !== undefined) {
+      this._state = evaluation.nextState;
+    }
     return true;
   }
 
-  public whoPlays(): PieceColor {
-    return this._whoPlays;
+  public isValidMove(move: IMove): boolean {
+    return this._pipeline.evaluate(move, this._state).valid;
   }
 
-  private toggleTurn() {
-    this._whoPlays =
-      this._whoPlays === PieceColor.White ? PieceColor.Black : PieceColor.White;
+  public whoPlays(): PieceColor {
+    return this._state.currentTurn;
   }
 }

@@ -1,10 +1,10 @@
 import React from "react";
 import "../index.css";
-import { Piece } from "../game-engine/Piece";
+import { IPiece } from "../game-engine/IPiece";
 import { PieceFrame } from "./PieceFrame";
 
 interface SquareProps {
-  piece: Piece | null;
+  piece: IPiece | null;
   background: string;
   onClick: () => void;
 }

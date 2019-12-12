@@ -1,4 +1,4 @@
-import { PieceColor, Piece } from "./Piece";
+import { PieceColor, IPiece } from "./IPiece";
 
 // Represents a chess square, used to represent piece locations
 export interface Square {

@@ -1,9 +1,9 @@
 import React from "react";
 import "../index.css";
-import { Piece, PieceColor } from "../game-engine/Piece";
+import { IPiece, PieceColor } from "../game-engine/IPiece";
 
 interface PieceProps {
-  piece: Piece | null;
+  piece: IPiece | null;
 }
 
 const style: React.CSSProperties = {
@@ -12,7 +12,7 @@ const style: React.CSSProperties = {
   border: "none"
 };
 
-function pieceImage(piece: Piece | null): string {
+function pieceImage(piece: IPiece | null): string {
   if (piece === null) {
     return "";
   }

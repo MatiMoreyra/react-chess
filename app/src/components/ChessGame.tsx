@@ -1,7 +1,7 @@
 import { BoardView } from "./BoardView";
 import React from "react";
-import { ChessGameEngine, Move } from "../game-engine/ChessGameEngine";
-import { Square } from "../game-engine/Square";
+import { ChessGameEngine, IMove } from "../game-engine/ChessGameEngine";
+import { Square } from "../game-engine/ISquare";
 import { Centered } from "./utils/Centered";
 
 interface ChessGameProps {
@@ -48,7 +48,7 @@ export class ChessGame extends React.Component<ChessGameProps, ChessGameState> {
         this.setState({ sourceSquare: { row: row, column: col } });
       }
     } else {
-      let move: Move = {
+      let move: IMove = {
         source: this.state.sourceSquare,
         destination: { row: row, column: col }
       };

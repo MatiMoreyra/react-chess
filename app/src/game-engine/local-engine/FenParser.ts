@@ -1,6 +1,6 @@
-import { Piece, PieceType, PieceColor } from "../Piece";
+import { IPiece, PieceType, PieceColor } from "../IPiece";
 
-function charToPiece(char: string): Piece | null {
+function charToPiece(char: string): IPiece | null {
   switch (char) {
     case "k":
       return { type: PieceType.King, color: PieceColor.Black };
@@ -31,11 +31,11 @@ function charToPiece(char: string): Piece | null {
   }
 }
 
-export function parseFen(fen: string): Array<Array<Piece | null>> | null {
+export function parseFen(fen: string): Array<Array<IPiece | null>> | null {
   // Create a matrix of pieces filled with null.
-  let pieces = new Array<Array<Piece | null>>(8);
+  let pieces = new Array<Array<IPiece | null>>(8);
   for (let row = 0; row < 8; row++) {
-    pieces[row] = new Array<Piece | null>(8).fill(null);
+    pieces[row] = new Array<IPiece | null>(8).fill(null);
   }
 
   let rows = fen.split("/");

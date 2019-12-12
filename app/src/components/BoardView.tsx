@@ -1,10 +1,10 @@
-import { Board } from "../game-engine/Board";
+import { IBoard } from "../game-engine/IBoard";
 import { SquareFrame } from "./SquareFrame";
 import React, { ReactNode } from "react";
-import { Square } from "../game-engine/Square";
+import { Square } from "../game-engine/ISquare";
 
 interface BoardProps {
-  board: Board;
+  board: IBoard;
   onSquareClick: (col: number, row: number) => void;
   highlightedSquares?: Array<Square>;
 }
