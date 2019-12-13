@@ -6,6 +6,7 @@ import { RulesPipeline } from "./RulesPipeline";
 import { DummyRule } from "./rules/DummyRule";
 import { GameState } from "./GameState";
 import { Board } from "./Board";
+import { TurnsRule } from "./rules/TurnsRule";
 
 export class LocalEngine extends ChessGameEngine {
   private _state: GameState;
@@ -22,7 +23,7 @@ export class LocalEngine extends ChessGameEngine {
       new Array<IMove>()
     );
     this._pipeline = new RulesPipeline();
-    this._pipeline.push(new DummyRule());
+    this.setupRulesPipeline();
   }
 
   public getChessBoard(): IBoard {
@@ -47,5 +48,10 @@ export class LocalEngine extends ChessGameEngine {
 
   public whoPlays(): PieceColor {
     return this._state.currentTurn;
+  }
+
+  private setupRulesPipeline(): void {
+    this._pipeline.push(new TurnsRule());
+    this._pipeline.push(new DummyRule());
   }
 }
