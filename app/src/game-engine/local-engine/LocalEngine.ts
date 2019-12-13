@@ -3,10 +3,11 @@ import { IBoard } from "../IBoard";
 import { parseFen } from "./FenParser";
 import { ChessGameEngine, IMove } from "../ChessGameEngine";
 import { RulesPipeline } from "./RulesPipeline";
-import { DummyRule } from "./rules/DummyRule";
 import { GameState } from "./GameState";
 import { Board } from "./Board";
 import { TurnsRule } from "./rules/TurnsRule";
+import { KingMovementRule } from "./rules/KingMovementRule";
+import { PawnShortMovementRule } from "./rules/PawnShortMovementRule";
 
 export class LocalEngine extends ChessGameEngine {
   private _state: GameState;
@@ -52,6 +53,7 @@ export class LocalEngine extends ChessGameEngine {
 
   private setupRulesPipeline(): void {
     this._pipeline.push(new TurnsRule());
-    this._pipeline.push(new DummyRule());
+    this._pipeline.push(new KingMovementRule());
+    this._pipeline.push(new PawnShortMovementRule());
   }
 }
