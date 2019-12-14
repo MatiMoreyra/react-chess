@@ -1,10 +1,10 @@
 import { Rule, RuleEvaluationResult } from "../Rule";
 import { GameState } from "../GameState";
-import { IMove } from "../../IMove";
+import { Move } from "../Move";
 import { PieceColor, PieceType } from "../../IPiece";
 
 export class PawnCaptureMovementRule extends Rule {
-  public evaluate(move: IMove, state: GameState): RuleEvaluationResult {
+  public evaluate(move: Move, state: GameState): RuleEvaluationResult {
     let movingPiece = state.board.getPiece(move.source);
 
     // If the moving piece is not a king, just delegate the evaluation to the
@@ -24,10 +24,7 @@ export class PawnCaptureMovementRule extends Rule {
         break;
     }
 
-    let dy = move.destination.row - move.source.row;
-    let dx = move.destination.column - move.source.column;
-
-    if (dy === validDy && Math.abs(dx) === 1) {
+    if (move.dy === validDy && Math.abs(move.dx) === 1) {
       // Can move if there is a piece of the oposite color at destination
       let pieceAtDestination = state.board.getPiece(move.destination);
       if (

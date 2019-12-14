@@ -1,10 +1,10 @@
 import { Rule, RuleEvaluationResult } from "../Rule";
 import { GameState } from "../GameState";
-import { IMove } from "../../IMove";
 import { PieceType } from "../../IPiece";
+import { Move } from "../Move";
 
 export class BishopMovementRule extends Rule {
-  public evaluate(move: IMove, state: GameState): RuleEvaluationResult {
+  public evaluate(move: Move, state: GameState): RuleEvaluationResult {
     let movingPiece = state.board.getPiece(move.source);
 
     // If the moving piece is not a king, just delegate the evaluation to the
@@ -19,19 +19,16 @@ export class BishopMovementRule extends Rule {
       return { valid: false };
     }
 
-    let dx = move.destination.column - move.source.column;
-    let dy = move.destination.row - move.source.row;
-
     // Diagonal movement means abs(dx) === abs(dy)
-    if (Math.abs(dx) !== Math.abs(dy)) {
+    if (!move.isDiagonal()) {
       return { valid: false };
     }
 
-    // Check if the path is free
+    // Check if the path is clear
     let advance = 1;
-    while (advance < Math.abs(dx)) {
-      let col = move.source.column + advance * Math.sign(dx);
-      let row = move.source.row + advance * Math.sign(dy);
+    while (advance < Math.abs(move.dx)) {
+      let col = move.source.column + advance * Math.sign(move.dx);
+      let row = move.source.row + advance * Math.sign(move.dy);
       if (state.board.getPiece({ row: row, column: col }) !== null) {
         return { valid: false };
       }

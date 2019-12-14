@@ -1,6 +1,6 @@
 import { Rule, RuleEvaluationResult } from "./Rule";
 import { GameState } from "./GameState";
-import { IMove } from "../IMove";
+import { Move } from "./Move";
 
 export class RulesPipeline {
   private _firstRule?: Rule;
@@ -18,7 +18,7 @@ export class RulesPipeline {
     }
   }
 
-  public evaluate(move: IMove, state: GameState): RuleEvaluationResult {
+  public evaluate(move: Move, state: GameState): RuleEvaluationResult {
     if (this._firstRule !== undefined) {
       return this._firstRule.evaluate(move, state);
     }

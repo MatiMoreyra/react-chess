@@ -1,10 +1,10 @@
 import { Rule, RuleEvaluationResult } from "../Rule";
 import { GameState } from "../GameState";
-import { IMove } from "../../IMove";
+import { Move } from "../Move";
 import { PieceColor } from "../../IPiece";
 
 export class TurnsRule extends Rule {
-  public evaluate(move: IMove, state: GameState): RuleEvaluationResult {
+  public evaluate(move: Move, state: GameState): RuleEvaluationResult {
     let movingPiece = state.board.getPiece(move.source);
 
     // If the moving piece is not of the same color of the current turn

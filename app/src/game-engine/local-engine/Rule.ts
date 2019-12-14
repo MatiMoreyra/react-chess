@@ -1,5 +1,5 @@
-import { IMove } from "../IMove";
 import { GameState } from "./GameState";
+import { Move } from "./Move";
 
 export interface RuleEvaluationResult {
   valid: boolean;
@@ -31,5 +31,5 @@ export interface RuleEvaluationResult {
 export abstract class Rule {
   /// Reference of the next rule in the pipeline
   public next?: Rule;
-  public abstract evaluate(move: IMove, state: GameState): RuleEvaluationResult;
+  public abstract evaluate(move: Move, state: GameState): RuleEvaluationResult;
 }

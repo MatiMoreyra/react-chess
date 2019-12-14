@@ -1,10 +1,10 @@
 import { Rule, RuleEvaluationResult } from "../Rule";
 import { GameState } from "../GameState";
-import { IMove } from "../../IMove";
 import { PieceType } from "../../IPiece";
+import { Move } from "../Move";
 
 export class KingMovementRule extends Rule {
-  public evaluate(move: IMove, state: GameState): RuleEvaluationResult {
+  public evaluate(move: Move, state: GameState): RuleEvaluationResult {
     let movingPiece = state.board.getPiece(move.source);
 
     // If the moving piece is not a king, just delegate the evaluation to the
@@ -19,11 +19,8 @@ export class KingMovementRule extends Rule {
       return { valid: false };
     }
 
-    let dy = move.destination.row - move.source.row;
-    let dx = move.destination.column - move.source.column;
-
     // Can move 1 square away in any direction
-    if (Math.abs(dx) <= 1 && Math.abs(dy) <= 1) {
+    if (Math.abs(move.dx) <= 1 && Math.abs(move.dy) <= 1) {
       let nextState = state.clone();
       nextState.board.move(move);
       nextState.history.push(move);

@@ -1,10 +1,10 @@
 import { Rule, RuleEvaluationResult } from "../Rule";
 import { GameState } from "../GameState";
-import { IMove } from "../../IMove";
+import { Move } from "../Move";
 import { PieceType } from "../../IPiece";
 
 export class RookMovementRule extends Rule {
-  public evaluate(move: IMove, state: GameState): RuleEvaluationResult {
+  public evaluate(move: Move, state: GameState): RuleEvaluationResult {
     let movingPiece = state.board.getPiece(move.source);
 
     // If the moving piece is not a king, just delegate the evaluation to the
@@ -19,19 +19,16 @@ export class RookMovementRule extends Rule {
       return { valid: false };
     }
 
-    let dx = move.destination.column - move.source.column;
-    let dy = move.destination.row - move.source.row;
-
-    // Straight movement means abs(dx) === 0 or abs(dy) === 0 but not both, so:
-    if (Math.abs(dx) * Math.abs(dy) !== 0 || dx === dy) {
+    // Can move vertically or horizontally
+    if (!move.isHorizontal && !move.isHorizontal) {
       return { valid: false };
     }
 
     // Check if the path is free
     let advance = 1;
-    while (advance < Math.abs(dx) || advance < Math.abs(dy)) {
-      let col = move.source.column + advance * Math.sign(dx);
-      let row = move.source.row + advance * Math.sign(dy);
+    while (advance < Math.abs(move.dx) || advance < Math.abs(move.dy)) {
+      let col = move.source.column + advance * Math.sign(move.dx);
+      let row = move.source.row + advance * Math.sign(move.dy);
       if (state.board.getPiece({ row: row, column: col }) !== null) {
         return { valid: false };
       }

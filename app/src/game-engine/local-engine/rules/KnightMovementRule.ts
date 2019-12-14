@@ -1,10 +1,10 @@
 import { Rule, RuleEvaluationResult } from "../Rule";
 import { GameState } from "../GameState";
-import { IMove } from "../../IMove";
+import { Move } from "../Move";
 import { PieceType } from "../../IPiece";
 
 export class KnightMovementRule extends Rule {
-  public evaluate(move: IMove, state: GameState): RuleEvaluationResult {
+  public evaluate(move: Move, state: GameState): RuleEvaluationResult {
     let movingPiece = state.board.getPiece(move.source);
 
     // If the moving piece is not a king, just delegate the evaluation to the
@@ -19,11 +19,8 @@ export class KnightMovementRule extends Rule {
       return { valid: false };
     }
 
-    let dy = move.destination.row - move.source.row;
-    let dx = move.destination.column - move.source.column;
-
     // Cool solution
-    if (Math.abs(dx * dy) === 2) {
+    if (Math.abs(move.dx * move.dy) === 2) {
       let nextState = state.clone();
       nextState.board.move(move);
       nextState.history.push(move);

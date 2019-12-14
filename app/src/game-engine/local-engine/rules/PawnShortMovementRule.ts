@@ -1,10 +1,10 @@
 import { Rule, RuleEvaluationResult } from "../Rule";
 import { GameState } from "../GameState";
-import { IMove } from "../../IMove";
+import { Move } from "../Move";
 import { PieceColor, PieceType } from "../../IPiece";
 
 export class PawnShortMovementRule extends Rule {
-  public evaluate(move: IMove, state: GameState): RuleEvaluationResult {
+  public evaluate(move: Move, state: GameState): RuleEvaluationResult {
     let movingPiece = state.board.getPiece(move.source);
 
     // If the moving piece is not a king, just delegate the evaluation to the
@@ -24,10 +24,7 @@ export class PawnShortMovementRule extends Rule {
         break;
     }
 
-    let dy = move.destination.row - move.source.row;
-    let dx = move.destination.column - move.source.column;
-
-    if (dy === validDy && Math.abs(dx) === 0) {
+    if (move.dy === validDy && Math.abs(move.dx) === 0) {
       // Can move if the destination square is empty.
       let pieceAtDestination = state.board.getPiece(move.destination);
       if (pieceAtDestination === null) {

@@ -15,6 +15,7 @@ import { BishopMovementRule } from "./rules/BishopMovementRule";
 import { RookMovementRule } from "./rules/RookMovementRule";
 import { QueenMovementRule } from "./rules/QueenMovementRule";
 import { IMove } from "../IMove";
+import { Move } from "./Move";
 
 export class LocalEngine extends ChessGameEngine {
   private _state: GameState;
@@ -28,7 +29,7 @@ export class LocalEngine extends ChessGameEngine {
     this._state = new GameState(
       new Board({ pieces: pieces }),
       PieceColor.White,
-      new Array<IMove>()
+      new Array<Move>()
     );
     this._pipeline = new RulesPipeline();
     this.setupRulesPipeline();
@@ -43,7 +44,7 @@ export class LocalEngine extends ChessGameEngine {
   }
 
   public move(move: IMove): boolean {
-    let evaluation = this._pipeline.evaluate(move, this._state);
+    let evaluation = this._pipeline.evaluate(new Move(move), this._state);
     if (evaluation.valid && evaluation.nextState !== undefined) {
       this._state = evaluation.nextState;
     }
@@ -51,7 +52,7 @@ export class LocalEngine extends ChessGameEngine {
   }
 
   public isValidMove(move: IMove): boolean {
-    return this._pipeline.evaluate(move, this._state).valid;
+    return this._pipeline.evaluate(new Move(move), this._state).valid;
   }
 
   public whoPlays(): PieceColor {
