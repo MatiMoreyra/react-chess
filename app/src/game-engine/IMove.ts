@@ -1,6 +1,6 @@
-import { Square } from "./ISquare";
+import { ISquare } from "./ISquare";
 
 export interface IMove {
-  source: Square;
-  destination: Square;
+  source: ISquare;
+  destination: ISquare;
 }

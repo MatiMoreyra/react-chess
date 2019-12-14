@@ -1,12 +1,12 @@
 import { IBoard } from "../game-engine/IBoard";
 import { SquareFrame } from "./SquareFrame";
 import React, { ReactNode } from "react";
-import { Square } from "../game-engine/ISquare";
+import { ISquare } from "../game-engine/ISquare";
 
 interface BoardProps {
   board: IBoard;
   onSquareClick: (col: number, row: number) => void;
-  highlightedSquares?: Array<Square>;
+  highlightedSquares?: Array<ISquare>;
 }
 
 const boardStyle: React.CSSProperties = {

@@ -1,6 +1,6 @@
 import { IBoard } from "../IBoard";
 import { IPiece } from "../IPiece";
-import { Square } from "../ISquare";
+import { ISquare } from "../ISquare";
 import { Move } from "./Move";
 
 // Class that provides extension methods to manipulate an IBoard
@@ -23,11 +23,11 @@ export class Board implements IBoard {
     return new Board({ pieces: pieces });
   }
 
-  public getPiece(square: Square): IPiece | null {
+  public getPiece(square: ISquare): IPiece | null {
     return this.pieces[square.row][square.column];
   }
 
-  public setPiece(square: Square, piece: IPiece | null) {
+  public setPiece(square: ISquare, piece: IPiece | null) {
     this.pieces[square.row][square.column] = piece;
   }
 

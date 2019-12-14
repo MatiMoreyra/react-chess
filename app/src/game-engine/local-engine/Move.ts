@@ -1,10 +1,10 @@
-import { Square } from "../ISquare";
+import { ISquare } from "../ISquare";
 import { IMove } from "../IMove";
 
 // Class that provides extension methods to manipulate an IMove
 export class Move implements IMove {
-  source: Square;
-  destination: Square;
+  source: ISquare;
+  destination: ISquare;
   constructor(move: IMove) {
     this.source = move.source;
     this.destination = move.destination;

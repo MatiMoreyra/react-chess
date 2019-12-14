@@ -1,7 +1,7 @@
 import { BoardView } from "./BoardView";
 import React from "react";
 import { ChessGameEngine } from "../game-engine/ChessGameEngine";
-import { Square } from "../game-engine/ISquare";
+import { ISquare } from "../game-engine/ISquare";
 import { Centered } from "./utils/Centered";
 import { IMove } from "../game-engine/IMove";
 
@@ -10,7 +10,7 @@ interface ChessGameProps {
 }
 
 interface ChessGameState {
-  sourceSquare: Square | null;
+  sourceSquare: ISquare | null;
 }
 
 const gameStyle: React.CSSProperties = {
@@ -61,7 +61,7 @@ export class ChessGame extends React.Component<ChessGameProps, ChessGameState> {
   };
 
   private highlightedSquares = () => {
-    let squares = new Array<Square>();
+    let squares = new Array<ISquare>();
     if (this.state.sourceSquare != null) {
       squares.push(this.state.sourceSquare);
     }
