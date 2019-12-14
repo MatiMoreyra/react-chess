@@ -1,13 +1,13 @@
-import { ISquare } from "../../ISquare";
 import { IMove } from "../../IMove";
+import { Square } from "./Square";
 
 // Class that provides extension methods to manipulate an IMove
 export class Move implements IMove {
-  source: ISquare;
-  destination: ISquare;
+  source: Square;
+  destination: Square;
   constructor(move: IMove) {
-    this.source = move.source;
-    this.destination = move.destination;
+    this.source = new Square(move.source);
+    this.destination = new Square(move.destination);
   }
 
   public get dx(): number {
@@ -28,5 +28,12 @@ export class Move implements IMove {
 
   public isDiagonal(): boolean {
     return Math.abs(this.dx) === Math.abs(this.dy) && this.dx !== 0;
+  }
+
+  public equals(move: Move) {
+    return (
+      this.source.equals(move.source) &&
+      this.destination.equals(move.destination)
+    );
   }
 }
