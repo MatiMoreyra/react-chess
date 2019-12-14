@@ -15,19 +15,16 @@ export class PawnLongMovementRule extends Rule {
 
     let validSourceRow = 0;
     let validDestinationRow = 0;
-    let middleRow = 0;
     switch (movingPiece.color) {
       // White pawns can make moves from column 6 to 4
       case PieceColor.White:
         validSourceRow = 6;
-        middleRow = 5;
         validDestinationRow = 4;
         break;
 
       // Black pawns can make moves from column 1 to 3
       case PieceColor.Black:
         validSourceRow = 1;
-        middleRow = 2;
         validDestinationRow = 3;
         break;
     }
@@ -35,23 +32,17 @@ export class PawnLongMovementRule extends Rule {
     if (
       move.source.row === validSourceRow &&
       move.destination.row === validDestinationRow &&
-      Math.abs(move.dx) === 0
+      Math.abs(move.dx) === 0 &&
+      state.board.isPathFree(move) && // The path should be empty
+      !state.board.getPiece(move.destination) // Destination should be empty
     ) {
-      // Can move if the destination square and the path to it empty.
-      let pieceAtDestination = state.board.getPiece(move.destination);
-      let pieceAtPath = state.board.getPiece({
-        row: middleRow,
-        column: move.source.column
-      });
-      if (pieceAtDestination === null && pieceAtPath == null) {
-        let nextState = state.clone();
-        nextState.board.move(move);
-        nextState.history.push(move);
-        return {
-          valid: true,
-          nextState: nextState
-        };
-      }
+      let nextState = state.clone();
+      nextState.board.move(move);
+      nextState.history.push(move);
+      return {
+        valid: true,
+        nextState: nextState
+      };
     }
 
     // Just evaluate other pawn movement rules.

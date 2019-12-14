@@ -19,19 +19,13 @@ export class QueenMovementRule extends Rule {
       return { valid: false };
     }
 
-    if (!move.isDiagonal() && !move.isVertical() && !move.isVertical()) {
+    if (!move.isDiagonal() && !move.isVertical() && !move.isHorizontal()) {
       return { valid: false };
     }
 
     // Check if the path is clear
-    let advance = 1;
-    while (advance < Math.abs(move.dx) || advance < Math.abs(move.dy)) {
-      let col = move.source.column + advance * Math.sign(move.dy);
-      let row = move.source.row + advance * Math.sign(move.dy);
-      if (state.board.getPiece({ row: row, column: col }) !== null) {
-        return { valid: false };
-      }
-      advance++;
+    if (!state.board.isPathFree(move)) {
+      return { valid: false };
     }
 
     // Everything is fine, can move.
@@ -43,5 +37,4 @@ export class QueenMovementRule extends Rule {
       nextState: nextState
     };
   }
-
 }

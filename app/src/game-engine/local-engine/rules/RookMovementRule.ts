@@ -20,19 +20,13 @@ export class RookMovementRule extends Rule {
     }
 
     // Can move vertically or horizontally
-    if (!move.isHorizontal && !move.isHorizontal) {
+    if (!move.isVertical() && !move.isHorizontal()) {
       return { valid: false };
     }
 
-    // Check if the path is free
-    let advance = 1;
-    while (advance < Math.abs(move.dx) || advance < Math.abs(move.dy)) {
-      let col = move.source.column + advance * Math.sign(move.dx);
-      let row = move.source.row + advance * Math.sign(move.dy);
-      if (state.board.getPiece({ row: row, column: col }) !== null) {
-        return { valid: false };
-      }
-      advance++;
+    // Check if the path is clear
+    if (!state.board.isPathFree(move)) {
+      return { valid: false };
     }
 
     // Everything is fine, can move.

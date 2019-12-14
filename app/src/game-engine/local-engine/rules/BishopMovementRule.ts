@@ -25,14 +25,8 @@ export class BishopMovementRule extends Rule {
     }
 
     // Check if the path is clear
-    let advance = 1;
-    while (advance < Math.abs(move.dx)) {
-      let col = move.source.column + advance * Math.sign(move.dx);
-      let row = move.source.row + advance * Math.sign(move.dy);
-      if (state.board.getPiece({ row: row, column: col }) !== null) {
-        return { valid: false };
-      }
-      advance++;
+    if (!state.board.isPathFree(move)) {
+      return { valid: false };
     }
 
     // Everything is fine, can move.
