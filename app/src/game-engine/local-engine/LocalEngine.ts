@@ -8,6 +8,8 @@ import { Board } from "./Board";
 import { TurnsRule } from "./rules/TurnsRule";
 import { KingMovementRule } from "./rules/KingMovementRule";
 import { PawnShortMovementRule } from "./rules/PawnShortMovementRule";
+import { PawnLongMovementRule } from "./rules/PawnLongMovementRule";
+import { PawnCaptureMovementRule } from "./rules/PawnCaptureMovementRule";
 
 export class LocalEngine extends ChessGameEngine {
   private _state: GameState;
@@ -56,5 +58,6 @@ export class LocalEngine extends ChessGameEngine {
     this._pipeline.push(new KingMovementRule());
     this._pipeline.push(new PawnShortMovementRule());
     this._pipeline.push(new PawnLongMovementRule());
+    this._pipeline.push(new PawnCaptureMovementRule());
   }
 }
