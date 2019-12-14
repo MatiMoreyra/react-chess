@@ -13,12 +13,6 @@ export class PawnShortMovementRule extends Rule {
       return this.next ? this.next.evaluate(move, state) : { valid: false };
     }
 
-    // Cannot move if there is a piece of the same color at destination
-    let pieceAtDestination = state.board.getPiece(move.destination);
-    if (pieceAtDestination && pieceAtDestination.color === movingPiece.color) {
-      return { valid: false };
-    }
-
     let validDy = 0;
     switch (movingPiece.color) {
       case PieceColor.White:
@@ -47,6 +41,7 @@ export class PawnShortMovementRule extends Rule {
       }
     }
 
-    return { valid: false };
+    // Just evaluate other pawn movement rules.
+    return this.next ? this.next.evaluate(move, state) : { valid: false };
   }
 }
