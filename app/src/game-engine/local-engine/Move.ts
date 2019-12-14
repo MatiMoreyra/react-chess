@@ -11,7 +11,7 @@ export class Move implements IMove {
   }
 
   public get dx(): number {
-    return this.destination.column - this.source.row;
+    return this.destination.column - this.source.column;
   }
 
   public get dy(): number {
