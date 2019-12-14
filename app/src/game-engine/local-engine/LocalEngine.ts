@@ -55,5 +55,6 @@ export class LocalEngine extends ChessGameEngine {
     this._pipeline.push(new TurnsRule());
     this._pipeline.push(new KingMovementRule());
     this._pipeline.push(new PawnShortMovementRule());
+    this._pipeline.push(new PawnLongMovementRule());
   }
 }
