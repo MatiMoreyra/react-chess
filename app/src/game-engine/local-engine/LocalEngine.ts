@@ -16,6 +16,7 @@ import { RookMovementRule } from "./rules/RookMovementRule";
 import { QueenMovementRule } from "./rules/QueenMovementRule";
 import { IMove } from "../IMove";
 import { Move } from "./Move";
+import { EnPassantRule } from "./rules/EnPassantRule";
 
 export class LocalEngine extends ChessGameEngine {
   private _state: GameState;
@@ -69,5 +70,6 @@ export class LocalEngine extends ChessGameEngine {
     this._pipeline.push(new BishopMovementRule());
     this._pipeline.push(new RookMovementRule());
     this._pipeline.push(new QueenMovementRule());
+    this._pipeline.push(new EnPassantRule());
   }
 }
