@@ -1,6 +1,6 @@
 import { Rule, RuleEvaluationResult } from "../Rule";
 import { GameState } from "../GameState";
-import { Move } from "../extension-classes/Move";
+import { Move } from "../extensions/Move";
 
 export class DummyRule extends Rule {
   public evaluate(move: Move, state: GameState): RuleEvaluationResult {

@@ -1,6 +1,6 @@
 import { PieceColor } from "../IPiece";
-import { Board } from "./extension-classes/Board";
-import { Move } from "./extension-classes/Move";
+import { Board } from "./extensions/Board";
+import { Move } from "./extensions/Move";
 
 export class GameState {
   public board: Board;

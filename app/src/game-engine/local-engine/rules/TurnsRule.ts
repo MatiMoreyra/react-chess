@@ -1,6 +1,6 @@
 import { Rule, RuleEvaluationResult } from "../Rule";
 import { GameState } from "../GameState";
-import { Move } from "../extension-classes/Move";
+import { Move } from "../extensions/Move";
 import { PieceColor } from "../../IPiece";
 
 export class TurnsRule extends Rule {
