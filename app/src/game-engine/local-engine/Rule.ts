@@ -32,4 +32,13 @@ export abstract class Rule {
   /// Reference of the next rule in the pipeline
   public next?: Rule;
   public abstract evaluate(move: Move, state: GameState): RuleEvaluationResult;
+
+  /// Helper method used to evaluate the next rule.
+  /// Returns { valid: false} if this.next is undefined;
+  protected nextOrInvalidResult(
+    move: Move,
+    state: GameState
+  ): RuleEvaluationResult {
+    return this.next ? this.next.evaluate(move, state) : { valid: false };
+  }
 }

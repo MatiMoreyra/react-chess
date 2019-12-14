@@ -13,20 +13,17 @@ export class TurnsRule extends Rule {
       return { valid: false };
     }
 
-    if (!this.next) {
-      return { valid: false };
-    }
     // If the color is valid, continue evaluating rules.
-    let result = this.next.evaluate(move, state);
+    let result = this.nextOrInvalidResult(move, state);
 
     // Now if the evaluation is valid change the current turn color.
-    if (result && result.valid && result.nextState) {
+    if (result.valid && result.nextState) {
       result.nextState.currentTurn =
         result.nextState.currentTurn === PieceColor.White
           ? PieceColor.Black
           : PieceColor.White;
     }
 
-    return result ? result : { valid: false };
+    return result;
   }
 }

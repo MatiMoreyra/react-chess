@@ -46,6 +46,6 @@ export class PawnLongMovementRule extends Rule {
     }
 
     // Just evaluate other pawn movement rules.
-    return this.next ? this.next.evaluate(move, state) : { valid: false };
+    return this.nextOrInvalidResult(move, state);
   }
 }

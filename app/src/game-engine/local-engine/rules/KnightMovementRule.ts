@@ -10,7 +10,7 @@ export class KnightMovementRule extends Rule {
     // If the moving piece is not a king, just delegate the evaluation to the
     // next rule (if exists).
     if (!movingPiece || movingPiece.type !== PieceType.Knight) {
-      return this.next ? this.next.evaluate(move, state) : { valid: false };
+      return this.nextOrInvalidResult(move, state);
     }
 
     // Cannot move if there is a piece of the same color at destination
