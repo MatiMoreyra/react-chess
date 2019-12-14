@@ -4,7 +4,7 @@ import { parseFen } from "./FenParser";
 import { ChessGameEngine } from "../ChessGameEngine";
 import { RulesPipeline } from "./RulesPipeline";
 import { GameState } from "./GameState";
-import { Board } from "./Board";
+import { Board } from "./extension-classes/Board";
 import { TurnsRule } from "./rules/TurnsRule";
 import { KingMovementRule } from "./rules/KingMovementRule";
 import { PawnShortMovementRule } from "./rules/PawnShortMovementRule";
@@ -15,7 +15,7 @@ import { BishopMovementRule } from "./rules/BishopMovementRule";
 import { RookMovementRule } from "./rules/RookMovementRule";
 import { QueenMovementRule } from "./rules/QueenMovementRule";
 import { IMove } from "../IMove";
-import { Move } from "./Move";
+import { Move } from "./extension-classes/Move";
 import { EnPassantRule } from "./rules/EnPassantRule";
 
 export class LocalEngine extends ChessGameEngine {

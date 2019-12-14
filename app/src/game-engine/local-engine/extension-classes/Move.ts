@@ -1,5 +1,5 @@
-import { ISquare } from "../ISquare";
-import { IMove } from "../IMove";
+import { ISquare } from "../../ISquare";
+import { IMove } from "../../IMove";
 
 // Class that provides extension methods to manipulate an IMove
 export class Move implements IMove {

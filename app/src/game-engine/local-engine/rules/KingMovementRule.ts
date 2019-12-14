@@ -1,7 +1,7 @@
 import { Rule, RuleEvaluationResult } from "../Rule";
 import { GameState } from "../GameState";
 import { PieceType } from "../../IPiece";
-import { Move } from "../Move";
+import { Move } from "../extension-classes/Move";
 
 export class KingMovementRule extends Rule {
   public evaluate(move: Move, state: GameState): RuleEvaluationResult {

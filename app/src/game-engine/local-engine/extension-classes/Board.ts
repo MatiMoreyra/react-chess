@@ -1,6 +1,6 @@
-import { IBoard } from "../IBoard";
-import { IPiece } from "../IPiece";
-import { ISquare } from "../ISquare";
+import { IBoard } from "../../IBoard";
+import { IPiece } from "../../IPiece";
+import { ISquare } from "../../ISquare";
 import { Move } from "./Move";
 
 // Class that provides extension methods to manipulate an IBoard

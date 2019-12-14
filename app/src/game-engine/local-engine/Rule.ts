@@ -1,5 +1,5 @@
 import { GameState } from "./GameState";
-import { Move } from "./Move";
+import { Move } from "./extension-classes/Move";
 
 export interface RuleEvaluationResult {
   valid: boolean;
