@@ -11,6 +11,7 @@ import { PawnShortMovementRule } from "./rules/PawnShortMovementRule";
 import { PawnLongMovementRule } from "./rules/PawnLongMovementRule";
 import { PawnCaptureMovementRule } from "./rules/PawnCaptureMovementRule";
 import { KnightMovementRule } from "./rules/KnightMovementRule";
+import { BishopMovementRule } from "./rules/BishopMovementRule";
 
 export class LocalEngine extends ChessGameEngine {
   private _state: GameState;
@@ -61,5 +62,6 @@ export class LocalEngine extends ChessGameEngine {
     this._pipeline.push(new PawnLongMovementRule());
     this._pipeline.push(new PawnCaptureMovementRule());
     this._pipeline.push(new KnightMovementRule());
+    this._pipeline.push(new BishopMovementRule());
   }
 }
