@@ -1,6 +1,6 @@
 import { Rule, RuleEvaluationResult } from "../Rule";
 import { GameState } from "../GameState";
-import { IMove } from "../../ChessGameEngine";
+import { IMove } from "../../IMove";
 import { PieceColor, PieceType } from "../../IPiece";
 
 export class PawnCaptureMovementRule extends Rule {

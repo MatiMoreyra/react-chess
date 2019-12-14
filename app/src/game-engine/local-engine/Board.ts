@@ -1,7 +1,7 @@
 import { IBoard } from "../IBoard";
 import { IPiece } from "../IPiece";
 import { Square } from "../ISquare";
-import { IMove } from "../ChessGameEngine";
+import { IMove } from "../IMove";
 
 // Class that provides extension methods to manipulate an IBoard
 export class Board implements IBoard {

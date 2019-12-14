@@ -1,6 +1,6 @@
 import { PieceColor } from "../IPiece";
-import { IMove } from "../ChessGameEngine";
 import { Board } from "./Board";
+import { IMove } from "../IMove";
 
 export class GameState {
   public board: Board;

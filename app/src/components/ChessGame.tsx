@@ -1,8 +1,9 @@
 import { BoardView } from "./BoardView";
 import React from "react";
-import { ChessGameEngine, IMove } from "../game-engine/ChessGameEngine";
+import { ChessGameEngine } from "../game-engine/ChessGameEngine";
 import { Square } from "../game-engine/ISquare";
 import { Centered } from "./utils/Centered";
+import { IMove } from "../game-engine/IMove";
 
 interface ChessGameProps {
   engine: ChessGameEngine;

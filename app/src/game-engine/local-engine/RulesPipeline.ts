@@ -1,6 +1,6 @@
 import { Rule, RuleEvaluationResult } from "./Rule";
 import { GameState } from "./GameState";
-import { IMove } from "../ChessGameEngine";
+import { IMove } from "../IMove";
 
 export class RulesPipeline {
   private _firstRule?: Rule;

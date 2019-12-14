@@ -1,7 +1,7 @@
 import { PieceColor } from "../IPiece";
 import { IBoard } from "../IBoard";
 import { parseFen } from "./FenParser";
-import { ChessGameEngine, IMove } from "../ChessGameEngine";
+import { ChessGameEngine } from "../ChessGameEngine";
 import { RulesPipeline } from "./RulesPipeline";
 import { GameState } from "./GameState";
 import { Board } from "./Board";
@@ -14,6 +14,7 @@ import { KnightMovementRule } from "./rules/KnightMovementRule";
 import { BishopMovementRule } from "./rules/BishopMovementRule";
 import { RookMovementRule } from "./rules/RookMovementRule";
 import { QueenMovementRule } from "./rules/QueenMovementRule";
+import { IMove } from "../IMove";
 
 export class LocalEngine extends ChessGameEngine {
   private _state: GameState;

@@ -1,16 +1,11 @@
 import { IBoard } from "./IBoard";
-import { Square } from "./ISquare";
 import { PieceColor } from "./IPiece";
+import { IMove } from "./IMove";
 
 export enum GameResult {
   WhiteWins,
   BlackWins,
   Draw
-}
-
-export interface IMove {
-  source: Square;
-  destination: Square;
 }
 
 export abstract class ChessGameEngine {

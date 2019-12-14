@@ -1,4 +1,4 @@
-import { IMove } from "../ChessGameEngine";
+import { IMove } from "../IMove";
 import { GameState } from "./GameState";
 
 export interface RuleEvaluationResult {
