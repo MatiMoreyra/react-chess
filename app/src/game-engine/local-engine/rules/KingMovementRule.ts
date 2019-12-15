@@ -30,6 +30,6 @@ export class KingMovementRule extends Rule {
       };
     }
 
-    return { valid: false };
+    return this.nextOrInvalidResult(move, state);
   }
 }
