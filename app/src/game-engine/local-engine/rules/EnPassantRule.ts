@@ -2,6 +2,7 @@ import { Rule, RuleEvaluationResult } from "../Rule";
 import { GameState } from "../GameState";
 import { Move } from "../extensions/Move";
 import { PieceColor, PieceType } from "../../IPiece";
+import { Square } from "../extensions/Square";
 
 export class EnPassantRule extends Rule {
   public evaluate(move: Move, state: GameState): RuleEvaluationResult {
@@ -10,7 +11,7 @@ export class EnPassantRule extends Rule {
     // If the moving piece is not a king, just delegate the evaluation to the
     // next rule (if exists).
     if (!movingPiece || movingPiece.type !== PieceType.Pawn) {
-      return this.next ? this.next.evaluate(move, state) : { valid: false };
+      return this.nextOrInvalidResult(move, state);
     }
 
     let validDy = 0;
@@ -28,13 +29,15 @@ export class EnPassantRule extends Rule {
       // Can move if the last move was a long pawn move at destination column
       // from destination row + validDy to destination row - validDy.
 
-      let backSquare = {
+      let frontSquare = new Square({
         column: move.destination.column,
-        row: move.source.row
-      };
-
+        row: move.destination.row + validDy
+      });
+      let backSquare = new Square({
+        column: move.destination.column,
+        row: move.destination.row - validDy
+      });
       let pieceBehind = state.board.getPiece(backSquare);
-
       let lastMove = state.history[state.history.length - 1];
 
       if (
@@ -42,9 +45,9 @@ export class EnPassantRule extends Rule {
         pieceBehind.type === PieceType.Pawn && // Piece behind should be a pawn
         pieceBehind.color !== movingPiece.color && // of the oposite color
         // which did a long move in the last turn.
-        Math.abs(lastMove.dy) === 2 &&
-        lastMove.destination.column === backSquare.column &&
-        lastMove.destination.row === backSquare.row
+        lastMove.equals(
+          new Move({ source: frontSquare, destination: backSquare })
+        )
       ) {
         let nextState = state.clone();
         nextState.board.move(move);
