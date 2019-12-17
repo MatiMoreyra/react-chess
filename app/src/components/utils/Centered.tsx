@@ -1,8 +1,8 @@
 import React from "react";
 
 const centeredStyle: React.CSSProperties = {
-  margin: "0",
-  position: "absolute",
+  margin: "auto",
+  position: "relative",
   top: "50%",
   left: "50%",
   msTransform: "translate(-50%, -50%)",

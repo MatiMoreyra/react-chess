@@ -4,6 +4,8 @@ import { ChessGameEngine } from "../game-engine/ChessGameEngine";
 import { ISquare } from "../game-engine/ISquare";
 import { Centered } from "./utils/Centered";
 import { IMove } from "../game-engine/IMove";
+import { Row, Col, Container } from "react-bootstrap";
+import { StatusPanel } from "./StatusPanel";
 
 interface ChessGameProps {
   engine: ChessGameEngine;
@@ -16,7 +18,8 @@ interface ChessGameState {
 const gameStyle: React.CSSProperties = {
   backgroundImage: "linear-gradient(-90deg, #643722, #bf9c77, #643722)",
   width: "100vw",
-  height: "100vh"
+  height: "100vh",
+  overflow: "hidden"
 };
 
 export class ChessGame extends React.Component<ChessGameProps, ChessGameState> {
@@ -32,11 +35,23 @@ export class ChessGame extends React.Component<ChessGameProps, ChessGameState> {
     return (
       <div style={gameStyle}>
         <Centered>
-          <BoardView
-            board={board}
-            onSquareClick={this.handleSquareClick}
-            highlightedSquares={this.highlightedSquares()}
-          ></BoardView>
+          <Row
+            style={{ margin: "10px", height: "80%" }}
+            bsPrefix={"d-flex justify-content-center"}
+          >
+            <Container bsPrefix={"d-flex justify-content-center"}>
+              <Col>
+                  <BoardView
+                    board={board}
+                    onSquareClick={this.handleSquareClick}
+                    highlightedSquares={this.highlightedSquares()}
+                  ></BoardView>
+              </Col>
+              <Col>
+                <StatusPanel text={"Status panel"}></StatusPanel>
+              </Col>
+            </Container>
+          </Row>
         </Centered>
       </div>
     );
