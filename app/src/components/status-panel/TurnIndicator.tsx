@@ -21,7 +21,7 @@ const indicatorStyle: React.CSSProperties = {
 export const TurnIndicator: React.FunctionComponent<TurnIndicatorProps> = props => {
   let style = {...indicatorStyle};
   let text: string;
-  if (props.color == PieceColor.White) {
+  if (props.color === PieceColor.White) {
     text = "White";
     style.background = "white";
     style.color = "#626161";
