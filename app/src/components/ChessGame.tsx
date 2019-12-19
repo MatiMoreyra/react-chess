@@ -36,7 +36,7 @@ export class ChessGame extends React.Component<ChessGameProps, ChessGameState> {
       <div style={gameStyle}>
         <Centered>
           <Row
-            style={{ margin: "10px", height: "80%" }}
+            style={{ margin: "10px", height: "80%", maxHeight:"80vh" }}
             bsPrefix={"d-flex justify-content-center"}
           >
             <Container bsPrefix={"d-flex justify-content-center"}>
