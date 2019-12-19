@@ -2,6 +2,8 @@ import React from "react";
 import { Controls } from "./Controls";
 import { PanelHeader } from "./PanelHeader";
 import { TurnIndicator } from "./TurnIndicator";
+import { CapturedPieces } from "./CapturedPieces";
+import { PieceColor } from "../../game-engine/IPiece";
 
 interface StatusPanelProps {
   text: string;
@@ -24,10 +26,11 @@ export const StatusPanel: React.FunctionComponent<StatusPanelProps> = () => {
   return (
     <div style={panelStyle}>
       <div>
-        <TurnIndicator text="Black to move"></TurnIndicator>{" "}
+        <TurnIndicator color={PieceColor.Black}></TurnIndicator>{" "}
       </div>
       <div>
         <PanelHeader text="Captured Pieces"></PanelHeader>
+        <CapturedPieces text="Captured Pieces"></CapturedPieces>
       </div>
       <div style={{ marginTop: "auto" }}>
         <PanelHeader text="History"></PanelHeader>

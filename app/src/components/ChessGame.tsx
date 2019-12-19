@@ -1,11 +1,11 @@
-import { BoardView } from "./BoardView";
+import { BoardView } from "./game-view/BoardView";
 import React from "react";
 import { ChessGameEngine } from "../game-engine/ChessGameEngine";
 import { ISquare } from "../game-engine/ISquare";
 import { Centered } from "./utils/Centered";
 import { IMove } from "../game-engine/IMove";
 import { Row, Col, Container } from "react-bootstrap";
-import { StatusPanel } from "./StatusPanel";
+import { StatusPanel } from "./status-panel/StatusPanel";
 
 interface ChessGameProps {
   engine: ChessGameEngine;

@@ -1,6 +1,5 @@
 import React from "react";
-import "../index.css";
-import { IPiece } from "../game-engine/IPiece";
+import { IPiece } from "../../game-engine/IPiece";
 import { PieceFrame } from "./PieceFrame";
 
 interface SquareProps {

@@ -1,7 +1,7 @@
-import { IBoard } from "../game-engine/IBoard";
+import { IBoard } from "../../game-engine/IBoard";
 import { SquareFrame } from "./SquareFrame";
 import React, { ReactNode } from "react";
-import { ISquare } from "../game-engine/ISquare";
+import { ISquare } from "../../game-engine/ISquare";
 
 interface BoardProps {
   board: IBoard;

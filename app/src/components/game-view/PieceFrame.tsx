@@ -1,6 +1,5 @@
 import React from "react";
-import "../index.css";
-import { IPiece, PieceColor } from "../game-engine/IPiece";
+import { IPiece, PieceColor } from "../../game-engine/IPiece";
 
 interface PieceProps {
   piece: IPiece | null;
