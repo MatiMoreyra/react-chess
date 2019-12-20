@@ -9,6 +9,7 @@ import { IMove } from "../../game-engine/IMove";
 
 interface StatusPanelProps {
   history: Array<IMove>;
+  currentTurn: PieceColor;
 }
 
 const panelStyle: React.CSSProperties = {
@@ -38,7 +39,7 @@ export const StatusPanel: React.FunctionComponent<StatusPanelProps> = props => {
   return (
     <div style={panelStyle}>
       <div>
-        <TurnIndicator color={PieceColor.Black}></TurnIndicator>{" "}
+        <TurnIndicator color={props.currentTurn}></TurnIndicator>{" "}
         <PanelHeader text="Captured Pieces"></PanelHeader>
       </div>
       <CapturedPieces text="Captured Pieces"></CapturedPieces>
