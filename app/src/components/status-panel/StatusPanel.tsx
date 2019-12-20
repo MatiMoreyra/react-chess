@@ -5,9 +5,10 @@ import { TurnIndicator } from "./TurnIndicator";
 import { CapturedPieces } from "./CapturedPieces";
 import { PieceColor } from "../../game-engine/IPiece";
 import { HistoryView } from "./HistoryView";
+import { IMove } from "../../game-engine/IMove";
 
 interface StatusPanelProps {
-  text: string;
+  history: Array<IMove>;
 }
 
 const panelStyle: React.CSSProperties = {
@@ -33,7 +34,7 @@ function handleRestart(): void {
   console.log("Restart pressed");
 }
 
-export const StatusPanel: React.FunctionComponent<StatusPanelProps> = () => {
+export const StatusPanel: React.FunctionComponent<StatusPanelProps> = props => {
   return (
     <div style={panelStyle}>
       <div>
@@ -44,7 +45,16 @@ export const StatusPanel: React.FunctionComponent<StatusPanelProps> = () => {
       <div>
         <PanelHeader text="History"></PanelHeader>
       </div>
-        <HistoryView text="Asd"></HistoryView>
+      <div
+        style={{
+          display: "flex",
+          marginBottom: "auto",
+          overflow: "auto",
+          flexShrink: 2
+        }}
+      >
+        <HistoryView history={props.history}></HistoryView>
+      </div>
       <div>
         <PanelHeader text="Controls"></PanelHeader>
         <Controls onUndo={handleUndo} onRestart={handleRestart}></Controls>

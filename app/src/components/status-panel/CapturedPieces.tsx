@@ -13,7 +13,8 @@ const panelStyle: React.CSSProperties = {
   maxHeight: "100%",
   justifyContent: "space-around",
   padding: "5px",
-  overflowY: "scroll"
+  overflowY: "scroll",
+  overflowX: "hidden"
 };
 
 export const CapturedPieces: React.FunctionComponent<CapturedPiecesProps> = () => {

@@ -36,19 +36,21 @@ export class ChessGame extends React.Component<ChessGameProps, ChessGameState> {
       <div style={gameStyle}>
         <Centered>
           <Row
-            style={{ margin: "10px", height: "80%", maxHeight:"80vh" }}
+            style={{ margin: "10px", height: "80%", maxHeight: "80vh" }}
             bsPrefix={"d-flex justify-content-center"}
           >
             <Container bsPrefix={"d-flex justify-content-center"}>
               <Col>
-                  <BoardView
-                    board={board}
-                    onSquareClick={this.handleSquareClick}
-                    highlightedSquares={this.highlightedSquares()}
-                  ></BoardView>
+                <BoardView
+                  board={board}
+                  onSquareClick={this.handleSquareClick}
+                  highlightedSquares={this.highlightedSquares()}
+                ></BoardView>
               </Col>
               <Col>
-                <StatusPanel text={"Status panel"}></StatusPanel>
+                <StatusPanel
+                  history={this.props.engine.getHistory()}
+                ></StatusPanel>
               </Col>
             </Container>
           </Row>
