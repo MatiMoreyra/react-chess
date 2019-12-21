@@ -52,6 +52,8 @@ export class ChessGame extends React.Component<ChessGameProps, ChessGameState> {
                   history={this.props.engine.getHistory()}
                   currentTurn={this.props.engine.whoPlays()}
                   capturedPieces={this.props.engine.getCapturedPieces()}
+                  onUndo={this.handleUndo}
+                  onRestart={this.handleRestart}
                 ></StatusPanel>
               </Col>
             </Container>
@@ -60,6 +62,16 @@ export class ChessGame extends React.Component<ChessGameProps, ChessGameState> {
       </div>
     );
   }
+
+  private handleUndo = () => {
+    this.props.engine.undoMove();
+    this.setState({ sourceSquare: null });
+  };
+
+  private handleRestart = () => {
+    this.props.engine.restart();
+    this.setState({ sourceSquare: null });
+  };
 
   private handleSquareClick = (row: number, col: number) => {
     console.log(row + "," + col + " clicked");

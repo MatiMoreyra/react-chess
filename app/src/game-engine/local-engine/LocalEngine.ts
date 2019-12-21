@@ -22,6 +22,7 @@ import { Piece } from "./extensions/Piece";
 export class LocalEngine extends ChessGameEngine {
   private _state: GameState;
   private _pipeline: RulesPipeline;
+  private _stateHisory: Array<GameState>;
   constructor() {
     super();
     let pieces = parseFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
@@ -36,6 +37,7 @@ export class LocalEngine extends ChessGameEngine {
     );
     this._pipeline = new RulesPipeline();
     this.setupRulesPipeline();
+    this._stateHisory = new Array<GameState>();
   }
 
   public getChessBoard(): IBoard {
@@ -49,6 +51,7 @@ export class LocalEngine extends ChessGameEngine {
   public move(move: IMove): boolean {
     let evaluation = this._pipeline.evaluate(new Move(move), this._state);
     if (evaluation.valid && evaluation.nextState !== undefined) {
+      this._stateHisory.push(this._state);
       this._state = evaluation.nextState;
     }
     return true;
@@ -64,6 +67,20 @@ export class LocalEngine extends ChessGameEngine {
 
   public getCapturedPieces(): Array<IPiece> {
     return this._state.capturedPieces;
+  }
+
+  public undoMove(): void {
+    let lastState = this._stateHisory.pop();
+    if (lastState) {
+      this._state = lastState;
+    }
+  }
+
+  public restart(): void {
+    if (this._stateHisory.length !== 0) {
+      this._state = this._stateHisory[0];
+      this._stateHisory = new Array<GameState>();
+    }
   }
 
   private setupRulesPipeline(): void {

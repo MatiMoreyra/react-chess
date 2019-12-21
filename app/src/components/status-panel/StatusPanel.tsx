@@ -11,6 +11,8 @@ interface StatusPanelProps {
   history: Array<IMove>;
   currentTurn: PieceColor;
   capturedPieces: Array<IPiece>;
+  onUndo: () => void;
+  onRestart: () => void;
 }
 
 const panelStyle: React.CSSProperties = {
@@ -27,14 +29,6 @@ const panelStyle: React.CSSProperties = {
   flexDirection: "column",
   justifyContent: "space-between"
 };
-
-function handleUndo(): void {
-  console.log("Undo pressed");
-}
-
-function handleRestart(): void {
-  console.log("Restart pressed");
-}
 
 export const StatusPanel: React.FunctionComponent<StatusPanelProps> = props => {
   return (
@@ -59,7 +53,7 @@ export const StatusPanel: React.FunctionComponent<StatusPanelProps> = props => {
       </div>
       <div>
         <PanelHeader text="Controls"></PanelHeader>
-        <Controls onUndo={handleUndo} onRestart={handleRestart}></Controls>
+        <Controls onUndo={props.onUndo} onRestart={props.onRestart}></Controls>
       </div>
     </div>
   );

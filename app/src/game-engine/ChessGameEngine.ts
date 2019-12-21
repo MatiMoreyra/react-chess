@@ -15,4 +15,6 @@ export abstract class ChessGameEngine {
   public abstract move(move: IMove): boolean;
   public abstract isValidMove(move: IMove): boolean;
   public abstract whoPlays(): PieceColor;
+  public abstract undoMove(): void;
+  public abstract restart(): void;
 }
