@@ -1,4 +1,4 @@
-import { PieceColor } from "../IPiece";
+import { PieceColor, IPiece } from "../IPiece";
 import { IBoard } from "../IBoard";
 import { parseFen } from "./FenParser";
 import { ChessGameEngine } from "../ChessGameEngine";
@@ -17,6 +17,7 @@ import { QueenMovementRule } from "./rules/QueenMovementRule";
 import { IMove } from "../IMove";
 import { Move } from "./extensions/Move";
 import { EnPassantRule } from "./rules/EnPassantRule";
+import { Piece } from "./extensions/Piece";
 
 export class LocalEngine extends ChessGameEngine {
   private _state: GameState;
@@ -30,7 +31,8 @@ export class LocalEngine extends ChessGameEngine {
     this._state = new GameState(
       new Board({ pieces: pieces }),
       PieceColor.White,
-      new Array<Move>()
+      new Array<Move>(),
+      new Array<Piece>()
     );
     this._pipeline = new RulesPipeline();
     this.setupRulesPipeline();
@@ -58,6 +60,10 @@ export class LocalEngine extends ChessGameEngine {
 
   public whoPlays(): PieceColor {
     return this._state.currentTurn;
+  }
+
+  public getCapturedPieces(): Array<IPiece> {
+    return this._state.capturedPieces;
   }
 
   private setupRulesPipeline(): void {

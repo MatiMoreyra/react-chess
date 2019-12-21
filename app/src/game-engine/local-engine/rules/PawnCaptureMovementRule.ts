@@ -2,6 +2,7 @@ import { Rule, RuleEvaluationResult } from "../Rule";
 import { GameState } from "../GameState";
 import { Move } from "../extensions/Move";
 import { PieceColor, PieceType } from "../../IPiece";
+import { Piece } from "../extensions/Piece";
 
 export class PawnCaptureMovementRule extends Rule {
   public evaluate(move: Move, state: GameState): RuleEvaluationResult {
@@ -34,6 +35,7 @@ export class PawnCaptureMovementRule extends Rule {
         let nextState = state.clone();
         nextState.board.move(move);
         nextState.history.push(move);
+        nextState.capturedPieces.push(new Piece(pieceAtDestination));
         return {
           valid: true,
           nextState: nextState

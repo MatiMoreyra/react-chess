@@ -2,6 +2,7 @@ import { Rule, RuleEvaluationResult } from "../Rule";
 import { GameState } from "../GameState";
 import { PieceType } from "../../IPiece";
 import { Move } from "../extensions/Move";
+import { Piece } from "../extensions/Piece";
 
 export class KingMovementRule extends Rule {
   public evaluate(move: Move, state: GameState): RuleEvaluationResult {
@@ -24,6 +25,9 @@ export class KingMovementRule extends Rule {
       let nextState = state.clone();
       nextState.board.move(move);
       nextState.history.push(move);
+      if (pieceAtDestination) {
+        nextState.capturedPieces.push(new Piece(pieceAtDestination));
+      }
       return {
         valid: true,
         nextState: nextState
