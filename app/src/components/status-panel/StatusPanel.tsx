@@ -3,13 +3,14 @@ import { Controls } from "./Controls";
 import { PanelHeader } from "./PanelHeader";
 import { TurnIndicator } from "./TurnIndicator";
 import { CapturedPieces } from "./CapturedPieces";
-import { PieceColor } from "../../game-engine/IPiece";
+import { PieceColor, IPiece } from "../../game-engine/IPiece";
 import { HistoryView } from "./HistoryView";
 import { IMove } from "../../game-engine/IMove";
 
 interface StatusPanelProps {
   history: Array<IMove>;
   currentTurn: PieceColor;
+  capturedPieces: Array<IPiece>;
 }
 
 const panelStyle: React.CSSProperties = {
@@ -42,7 +43,7 @@ export const StatusPanel: React.FunctionComponent<StatusPanelProps> = props => {
         <TurnIndicator color={props.currentTurn}></TurnIndicator>{" "}
         <PanelHeader text="Captured Pieces"></PanelHeader>
       </div>
-      <CapturedPieces text="Captured Pieces"></CapturedPieces>
+      <CapturedPieces pieces={props.capturedPieces}></CapturedPieces>
       <div>
         <PanelHeader text="History"></PanelHeader>
       </div>

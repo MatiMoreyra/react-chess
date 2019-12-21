@@ -51,6 +51,7 @@ export class ChessGame extends React.Component<ChessGameProps, ChessGameState> {
                 <StatusPanel
                   history={this.props.engine.getHistory()}
                   currentTurn={this.props.engine.whoPlays()}
+                  capturedPieces={this.props.engine.getCapturedPieces()}
                 ></StatusPanel>
               </Col>
             </Container>
