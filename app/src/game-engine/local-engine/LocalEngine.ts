@@ -18,6 +18,7 @@ import { IMove } from "../IMove";
 import { Move } from "./extensions/Move";
 import { EnPassantRule } from "./rules/EnPassantRule";
 import { Piece } from "./extensions/Piece";
+import { CheckRule } from "./rules/CheckRule";
 
 export class LocalEngine extends ChessGameEngine {
   private _state: GameState;
@@ -85,6 +86,7 @@ export class LocalEngine extends ChessGameEngine {
 
   private setupRulesPipeline(): void {
     this._pipeline.push(new TurnsRule());
+    this._pipeline.push(new CheckRule());
     this._pipeline.push(new KingMovementRule());
     this._pipeline.push(new PawnShortMovementRule());
     this._pipeline.push(new PawnLongMovementRule());
