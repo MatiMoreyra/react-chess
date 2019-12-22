@@ -1,7 +1,7 @@
 import { PieceColor, IPiece } from "../IPiece";
 import { IBoard } from "../IBoard";
 import { parseFen } from "./FenParser";
-import { ChessGameEngine } from "../ChessGameEngine";
+import { ChessGameEngine, GameResult } from "../ChessGameEngine";
 import { RulesPipeline } from "./RulesPipeline";
 import { GameState } from "./GameState";
 import { Board } from "./extensions/Board";
@@ -19,6 +19,7 @@ import { Move } from "./extensions/Move";
 import { EnPassantRule } from "./rules/EnPassantRule";
 import { Piece } from "./extensions/Piece";
 import { CheckRule } from "./rules/CheckRule";
+import { GameEndedRule } from "./rules/GameEndedRule";
 
 export class LocalEngine extends ChessGameEngine {
   private _state: GameState;
@@ -34,7 +35,9 @@ export class LocalEngine extends ChessGameEngine {
       new Board({ pieces: pieces }),
       PieceColor.White,
       new Array<Move>(),
-      new Array<Piece>()
+      new Array<Piece>(),
+      false,
+      GameResult.Open
     );
     this._pipeline = new RulesPipeline();
     this.setupRulesPipeline();
@@ -54,8 +57,14 @@ export class LocalEngine extends ChessGameEngine {
     if (evaluation.valid && evaluation.nextState !== undefined) {
       this._stateHisory.push(this._state);
       this._state = evaluation.nextState;
+      if (this._state.result !== GameResult.Open) {
+        if (this.onGameEnded !== undefined) {
+          this.onGameEnded(this._state.result);
+        }
+      }
+      return true;
     }
-    return true;
+    return false;
   }
 
   public isValidMove(move: IMove): boolean {
@@ -85,6 +94,7 @@ export class LocalEngine extends ChessGameEngine {
   }
 
   private setupRulesPipeline(): void {
+    this._pipeline.push(new GameEndedRule());
     this._pipeline.push(new TurnsRule());
     this._pipeline.push(new CheckRule());
     this._pipeline.push(new KingMovementRule());

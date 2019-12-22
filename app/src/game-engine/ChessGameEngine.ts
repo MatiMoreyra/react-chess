@@ -3,9 +3,9 @@ import { PieceColor, IPiece } from "./IPiece";
 import { IMove } from "./IMove";
 
 export enum GameResult {
-  WhiteWins,
-  BlackWins,
-  Draw
+  CheckMate = "Checkmate",
+  Draw = "Draw",
+  Open = "Open"
 }
 
 export abstract class ChessGameEngine {
@@ -17,4 +17,5 @@ export abstract class ChessGameEngine {
   public abstract whoPlays(): PieceColor;
   public abstract undoMove(): void;
   public abstract restart(): void;
+  public onGameEnded?: (result: GameResult) => void;
 }

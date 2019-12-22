@@ -2,23 +2,30 @@ import { PieceColor } from "../IPiece";
 import { Board } from "./extensions/Board";
 import { Move } from "./extensions/Move";
 import { Piece } from "./extensions/Piece";
+import { GameResult } from "../ChessGameEngine";
 
 export class GameState {
   public board: Board;
   public currentTurn: PieceColor;
   public history: Array<Move>;
   public capturedPieces: Array<Piece>;
+  public onCheck: boolean;
+  public result: GameResult;
 
   constructor(
     board: Board,
     currentTurn: PieceColor,
     history: Array<Move>,
-    capturedPieces: Array<Piece>
+    capturedPieces: Array<Piece>,
+    onCheck: boolean,
+    result: GameResult
   ) {
     this.board = board;
     this.currentTurn = currentTurn;
     this.history = history;
     this.capturedPieces = capturedPieces;
+    this.onCheck = onCheck;
+    this.result = result;
   }
 
   // Deep copy
@@ -36,7 +43,9 @@ export class GameState {
       clonedBoard,
       this.currentTurn,
       clonedHistory,
-      clonedCapturedPieces
+      clonedCapturedPieces,
+      this.onCheck,
+      this.result
     );
   }
 }

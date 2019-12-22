@@ -11,9 +11,16 @@ export class CheckRule extends Rule {
     let result = this.nextOrInvalidResult(move, state);
 
     if (result.valid && result.nextState) {
+      // Invalidate the move if the player who moved is on check after the move
       if (this.isChecked(result.nextState, result.nextState.currentTurn)) {
         return { valid: false };
       }
+      let nextTurn =
+        state.currentTurn === PieceColor.White
+          ? PieceColor.Black
+          : PieceColor.White;
+
+      result.nextState.onCheck = this.isChecked(result.nextState, nextTurn);
     }
     return result;
   }
