@@ -1,11 +1,12 @@
 import { BoardView } from "./game-view/BoardView";
 import React from "react";
-import { ChessGameEngine } from "../game-engine/ChessGameEngine";
+import { ChessGameEngine, GameResult } from "../game-engine/ChessGameEngine";
 import { ISquare } from "../game-engine/ISquare";
 import { Centered } from "./utils/Centered";
 import { IMove } from "../game-engine/IMove";
-import { Row, Col, Container } from "react-bootstrap";
+import { Row, Col, Container, Modal, Button } from "react-bootstrap";
 import { StatusPanel } from "./status-panel/StatusPanel";
+import { PieceColor } from "../game-engine/IPiece";
 
 interface ChessGameProps {
   engine: ChessGameEngine;
@@ -13,6 +14,8 @@ interface ChessGameProps {
 
 interface ChessGameState {
   sourceSquare: ISquare | null;
+  showEndingModal: boolean;
+  endingMessage: string;
 }
 
 const gameStyle: React.CSSProperties = {
@@ -25,8 +28,11 @@ const gameStyle: React.CSSProperties = {
 export class ChessGame extends React.Component<ChessGameProps, ChessGameState> {
   constructor(p: ChessGameProps) {
     super(p);
+    p.engine.onGameEnded = this.handleGameEnded;
     this.state = {
-      sourceSquare: null
+      sourceSquare: null,
+      showEndingModal: false,
+      endingMessage: ""
     };
   }
 
@@ -59,6 +65,23 @@ export class ChessGame extends React.Component<ChessGameProps, ChessGameState> {
             </Container>
           </Row>
         </Centered>
+        <Modal
+          show={this.state.showEndingModal}
+          onHide={() => this.setState({ showEndingModal: false })}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Game ended!</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>{this.state.endingMessage}</Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="primary"
+              onClick={() => this.setState({ showEndingModal: false })}
+            >
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     );
   }
@@ -88,6 +111,27 @@ export class ChessGame extends React.Component<ChessGameProps, ChessGameState> {
         this.props.engine.move(move);
       }
       this.setState({ sourceSquare: null });
+    }
+  };
+
+  private handleGameEnded = (result: GameResult) => {
+    if (result === GameResult.Draw) {
+      this.setState({
+        showEndingModal: true,
+        endingMessage: "Game ended by draw."
+      });
+    } else {
+      if (this.props.engine.whoPlays() === PieceColor.White) {
+        this.setState({
+          showEndingModal: true,
+          endingMessage: "Black won by checkmate."
+        });
+      } else {
+        this.setState({
+          showEndingModal: true,
+          endingMessage: "White won by checkmate."
+        });
+      }
     }
   };
 
