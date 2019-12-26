@@ -4,9 +4,9 @@ import { ChessGameEngine, GameResult } from "../game-engine/ChessGameEngine";
 import { ISquare } from "../game-engine/ISquare";
 import { Centered } from "./utils/Centered";
 import { IMove } from "../game-engine/IMove";
-import { Row, Col, Container, Modal, Button } from "react-bootstrap";
+import { Row, Col, Container } from "react-bootstrap";
 import { StatusPanel } from "./status-panel/StatusPanel";
-import { PieceColor } from "../game-engine/IPiece";
+import { GameEndedModal } from "./GameEndedModal";
 
 interface ChessGameProps {
   engine: ChessGameEngine;
@@ -14,8 +14,7 @@ interface ChessGameProps {
 
 interface ChessGameState {
   sourceSquare: ISquare | null;
-  showEndingModal: boolean;
-  endingMessage: string;
+  gameResult: GameResult;
 }
 
 const gameStyle: React.CSSProperties = {
@@ -31,8 +30,7 @@ export class ChessGame extends React.Component<ChessGameProps, ChessGameState> {
     p.engine.onGameEnded = this.handleGameEnded;
     this.state = {
       sourceSquare: null,
-      showEndingModal: false,
-      endingMessage: ""
+      gameResult: GameResult.Open
     };
   }
 
@@ -65,23 +63,13 @@ export class ChessGame extends React.Component<ChessGameProps, ChessGameState> {
             </Container>
           </Row>
         </Centered>
-        <Modal
-          show={this.state.showEndingModal}
-          onHide={() => this.setState({ showEndingModal: false })}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Game ended!</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>{this.state.endingMessage}</Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="primary"
-              onClick={() => this.setState({ showEndingModal: false })}
-            >
-              Close
-            </Button>
-          </Modal.Footer>
-        </Modal>
+        <GameEndedModal
+          result={this.state.gameResult}
+          currentTurn={this.props.engine.whoPlays()}
+          onHide={() => {
+            this.setState({ gameResult: GameResult.Open });
+          }}
+        />
       </div>
     );
   }
@@ -115,24 +103,7 @@ export class ChessGame extends React.Component<ChessGameProps, ChessGameState> {
   };
 
   private handleGameEnded = (result: GameResult) => {
-    if (result === GameResult.Draw) {
-      this.setState({
-        showEndingModal: true,
-        endingMessage: "Game ended by draw."
-      });
-    } else {
-      if (this.props.engine.whoPlays() === PieceColor.White) {
-        this.setState({
-          showEndingModal: true,
-          endingMessage: "Black won by checkmate."
-        });
-      } else {
-        this.setState({
-          showEndingModal: true,
-          endingMessage: "White won by checkmate."
-        });
-      }
-    }
+    this.setState({ gameResult: result });
   };
 
   private highlightedSquares = () => {
