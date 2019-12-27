@@ -8,7 +8,7 @@ export class TurnsRule extends Rule {
     let movingPiece = state.board.getPiece(move.source);
 
     // If the moving piece is not of the same color of the current turn
-    // jus return an invalid result.
+    // just return an invalid result.
     if (movingPiece && movingPiece.color !== state.currentTurn) {
       return { valid: false };
     }
