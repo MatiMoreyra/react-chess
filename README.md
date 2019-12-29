@@ -9,7 +9,7 @@ Two player chess game built with React Typescript.
 ```
 git clone https://github.com/MatiMoreyra/react-chess.git
 ```
-2. Navigate into app/ directory
+2. Navigate into the `app/` directory
 ```
 cd react-chess/app
 ```
@@ -24,9 +24,13 @@ npm run build
 5. Open the app on your favorite browser (runs by default on localhost:3000):
 ```
 firefox http://localhost:3000/
-``` 
+```
 
-## What you can learn here:
+## What you can learn here
   - React + Typescript.
-  - A bit of functional programming (see the rule-based aproach).
-  - Unit-testing with jest.
+  - A bit of functional programming (see the [rules-pipeline based aproach](src/local-engine)).
+
+## TODOs
+  - Add unit-tests.
+  - Implement castling.
+  - Implement pawn promotion.
