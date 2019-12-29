@@ -28,7 +28,7 @@ firefox http://localhost:3000/
 
 ## What you can learn here
   - React + Typescript.
-  - A bit of functional programming (see the [rules-pipeline based aproach](src/local-engine)).
+  - A bit of functional programming (see the [rules-pipeline based aproach](src/local-engine/README.md)).
 
 ## TODOs
   - Add unit-tests.
