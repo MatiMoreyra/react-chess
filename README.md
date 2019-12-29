@@ -1,6 +1,9 @@
 # React Chess
 Two player chess game built with React Typescript.
 
+## Demo
+Deployed on github pages [here](https://matimoreyra.github.io/react-chess/).
+
 ## Prerequisites
   - Node.js v10.17.0 or later.
 
