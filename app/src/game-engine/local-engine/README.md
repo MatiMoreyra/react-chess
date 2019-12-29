@@ -30,7 +30,7 @@ export class TurnsRule extends Rule {
     // If the color is valid, continue evaluating rules.
     let result = this.nextOrInvalidResult(move, state);
 
-    // Now if the evaluation is valid change the current turn color.
+    // Now, if the evaluation is valid change the current turn color.
     if (result.valid && result.nextState) {
       result.nextState.currentTurn =
         result.nextState.currentTurn === PieceColor.White
