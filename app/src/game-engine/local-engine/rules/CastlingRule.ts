@@ -16,7 +16,7 @@ import { ISquare } from "../../ISquare";
 // king and tower must have never moved before
 // there must be empty spaces between the 2 pieces
 // castling zone must no be under attack ( like an invisible line trying to check )
-// king can't be under check (NOR THE PIECES BETWEEN KING AND ROOK)
+// king can't be under check (NOR THE SPACES BETWEEN KING AND ROOK)
 
 // can we propose that at the beggining shoot the castling when the king is trying to move to the specific squares of castling?
 // should we extend king and rook rules? get ideas frome pawn short and long movement
@@ -38,16 +38,20 @@ import { ISquare } from "../../ISquare";
 
 
 export class CastlingRule extends Rule {
-    private castled: boolean = false;
-    private alreadyMovedCastlingPieces: boolean = false;
+    private castled: boolean = false; //SHOLD BE ON THE GAME STATE IN ORDER TO ALLOW THE REVERT HISTORY RESET THIS FLAG
+    private movedCastledPieces: boolean = false; // SAME AS ABOVE
     private castlingPieces:string[] = ["King","Tower"];
     private defaultPositions  = { whiteRightTower : { row: 7, column: 7 },
-                                  whiteLeftTower : { row: 7, column: 0 }
+                                  whiteLeftTower : { row: 7, column: 0 },
+                                  whiteKingShortCastling : { row: 7, column: 6 },
+                                  whiteKingLongCastling : { row: 7, column: 2 },
+                                  whiteTowerShortCastling : { row: 7, column: 5 },
+                                  whiteTowerLongCastling : { row: 7, column: 3 },
                                 };
  
 
     public evaluate(move: Move, state: GameState): RuleEvaluationResult {
-        if (this.castled || this.alreadyMovedCastlingPieces){
+        if (this.castled || this.movedCastledPieces){
             return this.nextOrInvalidResult(move, state);
         }
         let movingPiece = state.board.getPiece(move.source);
@@ -56,27 +60,71 @@ export class CastlingRule extends Rule {
         }
         // piece is either rook or king 
         console.log('moved king or tower, set castling flag to true');
-        this.alreadyMovedCastlingPieces = true;
+        this.movedCastledPieces = true;
         // if the moving piece is the rook, set the flag to true and continue the pipeline
         // if it is the king, proceed with the evaluation
-        return movingPiece.type === PieceType.King ? this.proceedForKing(move,state):  this.nextOrInvalidResult(move, state);
+        return movingPiece.type === PieceType.King ? this.proceedCastling(move,state):  this.nextOrInvalidResult(move, state);
     }
 
-    protected proceedForKing(move: Move,state: GameState){    
+    private proceedCastling(move: Move,state: GameState){    
 
+        let [destinationTower,castlingTower,castlingKing] = this.isShortCastling(move) ? this.shortCastling() : this.longCastling(); //will need to include black logic for >dx
         let fakeMove : IMove = {
             source: move.source,
-            destination: this.defaultPositions.whiteRightTower
+            destination: destinationTower
         };
-        this.emptySpaces(fakeMove,state);
-        this.castled = true; // will be replaced for valid:true state: castledState
-        console.log('king Castled!');
+        if (this.emptySpaces(new Move(fakeMove), state)){
+            this.castled = true; // will be replaced for valid:true state: castledState
+            console.log('king Castled!');
+            return this.nextOrInvalidResult(move, state);
+        }
+
         return this.nextOrInvalidResult(move, state);
     }
 
-    protected emptySpaces(fakeMove: IMove, state:GameState): boolean{
-        console.log("the piece at destination on the fake move is :",state.board.getPiece(fakeMove.destination));
+    private emptySpaces(fakeMove: Move, state:GameState): boolean{
+        let [initCol,endCol]=this.initIndexes(fakeMove);
+        for(initCol; 0 < endCol-initCol; initCol++){
+            let resultGetPiece= state.board.getPiece({ row: fakeMove.source.row, column: initCol });
+            if(!!resultGetPiece){
+                console.log("pieces between the king and rook");
+                return false;
+            }
+        }
+        console.log("empty spaces");
         return true;
     }
 
+    private initIndexes(move: Move):number[]{
+        var startIndex:number;
+        var endIndex:number;
+        if (move.dx>0){
+            startIndex = move.source.column +1;
+            endIndex = move.destination.column;
+        }else{
+            startIndex = move.destination.column + 1;  
+            endIndex = move.source.column;
+        }
+        return [startIndex,endIndex];
+    }
+
+    private isShortCastling(move: Move):boolean{
+        return move.dx > 0 ? true : false; //works for whites but not for blacks
+    }
+
+    // both castling will return needed information like the position of the tower destination or the new state
+    private shortCastling(){
+        console.log('short castling');
+        let destinationTower = this.defaultPositions.whiteRightTower;
+        let castlingTower = this.defaultPositions.whiteTowerShortCastling;
+        let castlingKing = this.defaultPositions.whiteKingShortCastling;
+        return [destinationTower,castlingTower,castlingKing];
+    }
+    private longCastling(){
+        console.log('long castling');
+        let destinationTower = this.defaultPositions.whiteLeftTower;
+        let castlingTower = this.defaultPositions.whiteTowerLongCastling;
+        let castlingKing = this.defaultPositions.whiteKingLongCastling;
+        return [destinationTower,castlingTower,castlingKing];
+    }
 }   
