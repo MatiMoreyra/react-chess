@@ -29,7 +29,7 @@ export class LocalEngine extends ChessGameEngine {
   private _stateHisory: Array<GameState>;
   constructor() {
     super();
-    let pieces = parseFen(GameInitialPositions["Default"]);
+    let pieces = parseFen(GameInitialPositions["WhiteBothCastlingTest"]);
     if (pieces == null) {
       throw new Error("Invalid fen");
     }
@@ -98,6 +98,7 @@ export class LocalEngine extends ChessGameEngine {
   private setupRulesPipeline(): void {
     this._pipeline.push(new GameEndedRule());
     this._pipeline.push(new TurnsRule());
+    this._pipeline.push(new CastlingRule());
     this._pipeline.push(new CheckRule());
     this._pipeline.push(new KingMovementRule());
     this._pipeline.push(new PawnShortMovementRule());
