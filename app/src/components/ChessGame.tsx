@@ -88,7 +88,7 @@ export class ChessGame extends React.Component<ChessGameProps, ChessGameState> {
     console.log(row + "," + col + " clicked");
     if (this.state.sourceSquare == null) {
       if (this.props.engine.getChessBoard().pieces[row][col] != null) {
-        this.setState({ sourceSquare: { row: row, column: col } });
+        this.setState({...this.state, sourceSquare: { row: row, column: col } });
       }
     } else {
       let move: IMove = {
@@ -98,7 +98,7 @@ export class ChessGame extends React.Component<ChessGameProps, ChessGameState> {
       if (this.props.engine.isValidMove(move)) {
         this.props.engine.move(move);
       }
-      this.setState({ sourceSquare: null });
+      this.setState({...this.state, sourceSquare: null });
     }
   };
 
