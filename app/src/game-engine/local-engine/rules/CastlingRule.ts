@@ -68,15 +68,16 @@ export class CastlingRule extends Rule {
 
     private proceedCastling(move: Move,state: GameState){    
 
-        let [destinationTower,castlingTower,castlingKing] = this.isShortCastling(move) ? this.shortCastling() : this.longCastling(); //will need to include black logic for >dx
+        let [destinationTower,castledTower,castledKing] = this.isShortCastling(move) ? this.shortCastling() : this.longCastling(); //will need to include black logic for >dx
         let fakeMove : IMove = {
             source: move.source,
             destination: destinationTower
         };
+
         if (this.emptySpaces(new Move(fakeMove), state)){
-            this.castled = true; // will be replaced for valid:true state: castledState
-            console.log('king Castled!');
-            return this.nextOrInvalidResult(move, state);
+            let kingMove = { source: move.source, destination: castledKing }
+            let towerMove = { source: destinationTower, destination: castledTower}
+            return this.castle(state, kingMove, towerMove);
         }
 
         return this.nextOrInvalidResult(move, state);
@@ -116,15 +117,38 @@ export class CastlingRule extends Rule {
     private shortCastling(){
         console.log('short castling');
         let destinationTower = this.defaultPositions.whiteRightTower;
-        let castlingTower = this.defaultPositions.whiteTowerShortCastling;
-        let castlingKing = this.defaultPositions.whiteKingShortCastling;
-        return [destinationTower,castlingTower,castlingKing];
+        let castledTower = this.defaultPositions.whiteTowerShortCastling;
+        let castledKing = this.defaultPositions.whiteKingShortCastling;
+        return [destinationTower,castledTower,castledKing];
     }
     private longCastling(){
         console.log('long castling');
         let destinationTower = this.defaultPositions.whiteLeftTower;
-        let castlingTower = this.defaultPositions.whiteTowerLongCastling;
-        let castlingKing = this.defaultPositions.whiteKingLongCastling;
-        return [destinationTower,castlingTower,castlingKing];
+        let castledTower = this.defaultPositions.whiteTowerLongCastling;
+        let castledKing = this.defaultPositions.whiteKingLongCastling;
+        return [destinationTower,castledTower,castledKing];
+    }
+
+    private castle(state:GameState,moveKing: IMove, moveTower: IMove){
+        let nextState = state.clone();
+        let mk = new Move(moveKing);
+        console.log(mk);
+        debugger;
+        nextState.board.move(mk);
+        nextState.history.push(mk);
+        let nextStateSecond = nextState.clone();
+        let mt = new Move(moveTower);
+        console.log(mt);
+        nextStateSecond.board.move(mt);
+        nextStateSecond.history.push(mt); 
+        // this is not fine, the history shoud be an array of states, not from moves
+        // how are flags handled? caslted end game and all that? should improve this in some place
+        this.castled = true; // will be replaced for valid:true state: castledState
+        console.log('king Castled!');
+
+        return {
+          valid: true,
+          nextState: nextStateSecond
+        };
     }
 }   

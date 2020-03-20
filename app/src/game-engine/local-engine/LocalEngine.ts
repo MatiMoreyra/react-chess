@@ -29,7 +29,7 @@ export class LocalEngine extends ChessGameEngine {
   private _stateHisory: Array<GameState>;
   constructor() {
     super();
-    let pieces = parseFen(GameInitialPositions["WhiteShortCastlingNotEmptySpaces"]);
+    let pieces = parseFen(GameInitialPositions["WhiteShortCastlingTest"]);
     if (pieces == null) {
       throw new Error("Invalid fen");
     }
@@ -100,14 +100,14 @@ export class LocalEngine extends ChessGameEngine {
     this._pipeline.push(new TurnsRule());
     this._pipeline.push(new CastlingRule());
     this._pipeline.push(new CheckRule());
-    this._pipeline.push(new KingMovementRule());
-    this._pipeline.push(new PawnShortMovementRule());
-    this._pipeline.push(new PawnLongMovementRule());
-    this._pipeline.push(new PawnCaptureMovementRule());
-    this._pipeline.push(new KnightMovementRule());
-    this._pipeline.push(new BishopMovementRule());
-    this._pipeline.push(new RookMovementRule());
-    this._pipeline.push(new QueenMovementRule());
-    this._pipeline.push(new EnPassantRule());
+    // this._pipeline.push(new KingMovementRule());
+    // this._pipeline.push(new PawnShortMovementRule());
+    // this._pipeline.push(new PawnLongMovementRule());
+    // this._pipeline.push(new PawnCaptureMovementRule());
+    // this._pipeline.push(new KnightMovementRule());
+    // this._pipeline.push(new BishopMovementRule());
+    // this._pipeline.push(new RookMovementRule());
+    // this._pipeline.push(new QueenMovementRule());
+    // this._pipeline.push(new EnPassantRule());
   }
 }
