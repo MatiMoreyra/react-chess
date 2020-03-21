@@ -55,15 +55,16 @@ export class CastlingRule extends Rule {
             return this.nextOrInvalidResult(move, state);
         }
         let movingPiece = state.board.getPiece(move.source);
-        if (!movingPiece || movingPiece.type !in this.castlingPieces) {
-          return this.nextOrInvalidResult(move, state);
+        if (!!movingPiece){
+            if (!this.castlingPieces.includes(movingPiece.type)) {
+                return this.nextOrInvalidResult(move, state);
+            }
+            this.movedCastledPieces = true;
+            // if the moving piece is the rook, set the flag to true and continue the pipeline
+            // if it is the king, proceed with the evaluation
+            return movingPiece.type === PieceType.King ? this.proceedCastling(move,state):  this.nextOrInvalidResult(move, state);
         }
-        // piece is either rook or king 
-        console.log('moved king or tower, set castling flag to true');
-        this.movedCastledPieces = true;
-        // if the moving piece is the rook, set the flag to true and continue the pipeline
-        // if it is the king, proceed with the evaluation
-        return movingPiece.type === PieceType.King ? this.proceedCastling(move,state):  this.nextOrInvalidResult(move, state);
+        return { valid: false };
     }
 
     private proceedCastling(move: Move,state: GameState){    
@@ -132,23 +133,16 @@ export class CastlingRule extends Rule {
     private castle(state:GameState,moveKing: IMove, moveTower: IMove){
         let nextState = state.clone();
         let mk = new Move(moveKing);
-        console.log(mk);
-        debugger;
-        nextState.board.move(mk);
-        nextState.history.push(mk);
-        let nextStateSecond = nextState.clone();
         let mt = new Move(moveTower);
-        console.log(mt);
-        nextStateSecond.board.move(mt);
-        nextStateSecond.history.push(mt); 
-        // this is not fine, the history shoud be an array of states, not from moves
+        nextState.board.move(mk);
+        nextState.board.move(mt);
+        nextState.history.push(mt); 
         // how are flags handled? caslted end game and all that? should improve this in some place
         this.castled = true; // will be replaced for valid:true state: castledState
         console.log('king Castled!');
-
         return {
           valid: true,
-          nextState: nextStateSecond
+          nextState: nextState
         };
     }
 }   
