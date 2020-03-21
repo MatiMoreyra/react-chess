@@ -3,8 +3,9 @@ import { GameState } from "../GameState";
 import { Move } from "../extensions/Move";
 import { Square } from "../extensions/Square";
 import { IMove } from "../../IMove";
-import { PieceType, IPiece } from "../../IPiece";
+import { PieceType, PieceColor } from "../../IPiece";
 import { ISquare } from "../../ISquare";
+import { map } from 'rxjs/operators';
 
 
 //rule must be before king rule, because it will allow the king 2 spaces
@@ -13,72 +14,85 @@ import { ISquare } from "../../ISquare";
 // I think the best way to iplement this rule is to make an inner pipeline of rules
 
 
-// king and tower must have never moved before
-// there must be empty spaces between the 2 pieces
+// king and Rook must have never moved before -done
+// there must be empty spaces between the 2 pieces -done (refactorize it using already board function)
 // castling zone must no be under attack ( like an invisible line trying to check )
-// king can't be under check (NOR THE SPACES BETWEEN KING AND ROOK)
+// king can't be under check (NOR THE SPACES BETWEEN KING AND ROOK) same above
 
-// can we propose that at the beggining shoot the castling when the king is trying to move to the specific squares of castling?
-// should we extend king and rook rules? get ideas frome pawn short and long movement
-
-// there will be short and long castling
-// short must be to the right of the king
-// short allows king 1 movement and tower 2
-// long must be to the left
-// long allows king 2 movement and tower 3
-// from this I conclude that therw could be a predefined moved for each of the 2 castling
-// king 1 right tower 2 left
-// king 2 left tower 3 right
-// once all the validation rules are passed, we can decide which of the two castling are and implement it
 
 // states:
-// castled: boolean -> do not check the rule if already castled
-// once castled or having one of the 2 pieces moved, can we set the castling unallowed for the rest of the game? ->  can we somewhere add or remove rules? like there is a push in the pipeline, can we make the pop?
-// movement of the king can't be superposed
+// castled: boolean -> do not check the rule if already castled - done
+// once castled or having one of the 2 pieces moved -done
 
+// white and black logic: coluumns are the same for both -> take the source of the king. if It's never moved
+// then it has the row of the initial state , 0 or 7
+// need two flags for the states -?black castled, white castled..
 
 export class CastlingRule extends Rule {
-    private castled: boolean = false; //SHOLD BE ON THE GAME STATE IN ORDER TO ALLOW THE REVERT HISTORY RESET THIS FLAG
-    private movedCastledPieces: boolean = false; // SAME AS ABOVE
-    private castlingPieces:string[] = ["King","Tower"];
-    private defaultPositions  = { whiteRightTower : { row: 7, column: 7 },
-                                  whiteLeftTower : { row: 7, column: 0 },
-                                  whiteKingShortCastling : { row: 7, column: 6 },
-                                  whiteKingLongCastling : { row: 7, column: 2 },
-                                  whiteTowerShortCastling : { row: 7, column: 5 },
-                                  whiteTowerLongCastling : { row: 7, column: 3 },
+    private whiteCastled: boolean = false; //SHOLD BE ON THE GAME STATE IN ORDER TO ALLOW THE REVERT HISTORY RESET THIS FLAG
+    private whiteMovedCastledPieces: boolean = false; // SAME AS ABOVE
+    private blackCastled: boolean = false; //SHOLD BE ON THE GAME STATE IN ORDER TO ALLOW THE REVERT HISTORY RESET THIS FLAG
+    private blackMovedCastledPieces: boolean = false; // SAME AS ABOVE
+    // index 0 matchs PiceColor.Black,it is the same anyway
+    private castlingFlags = [
+        {castled: false, movedClastingPieces: false}, 
+        {castled: false, movedClastingPieces: false}
+    ]    
+    private castlingPieces:string[] = ["King","Rook"];
+    private defaultPositions  = { whiteRightRook : { row: 7, column: 7 },
+                                  whiteLeftRook : { row: 7, column: 0 },
                                 };
- 
+
+    private defaultKingPositions = {
+        whiteKingShortCastling : { row: 7, column: 6 },
+        whiteKingLongCastling : { row: 7, column: 2 },
+        blackKingShortCastling : { row: 0, column: 6 },
+        blackKingLongCastling : { row: 0, column: 2 },
+    }
+    private allowedKingCols = [6,2];
+    private defaultRookPositions = {
+        whiteRookShortCastling : { row: 7, column: 5 },
+        whiteRookLongCastling : { row: 7, column: 3 },
+        blackRookShortCastling : { row: 0, column: 5 },
+        blackRookLongCastling : { row: 0, column: 3 },
+    }
 
     public evaluate(move: Move, state: GameState): RuleEvaluationResult {
-        if (this.castled || this.movedCastledPieces){
-            return this.nextOrInvalidResult(move, state);
-        }
+
         let movingPiece = state.board.getPiece(move.source);
         if (!!movingPiece){
             if (!this.castlingPieces.includes(movingPiece.type)) {
                 return this.nextOrInvalidResult(move, state);
             }
-            this.movedCastledPieces = true;
+            let colorPiece = movingPiece.color;
+            debugger;
+            if (this.castlingFlags[colorPiece].castled || this.castlingFlags[colorPiece].movedClastingPieces){
+                return this.nextOrInvalidResult(move, state);
+            }
+
+            this.castlingFlags[colorPiece].movedClastingPieces = true;
             // if the moving piece is the rook, set the flag to true and continue the pipeline
             // if it is the king, proceed with the evaluation
-            return movingPiece.type === PieceType.King ? this.proceedCastling(move,state):  this.nextOrInvalidResult(move, state);
+            return movingPiece.type === PieceType.King ? this.proceedCastling(move,state,colorPiece):  this.nextOrInvalidResult(move, state);
         }
         return { valid: false };
     }
 
-    private proceedCastling(move: Move,state: GameState){    
+    private proceedCastling(move: Move, state: GameState, colorPiece: PieceColor){    
 
-        let [destinationTower,castledTower,castledKing] = this.isShortCastling(move) ? this.shortCastling() : this.longCastling(); //will need to include black logic for >dx
+        if(!this.allowedKingCols.includes(move.destination.column)){
+            return this.nextOrInvalidResult(move, state);
+        }
+        let [destinationRook,castledRook,castledKing] = this.isShortCastling(move) ? this.shortCastling() : this.longCastling(); //will need to include black logic for >dx
         let fakeMove : IMove = {
             source: move.source,
-            destination: destinationTower
+            destination: destinationRook
         };
 
         if (this.emptySpaces(new Move(fakeMove), state)){
             let kingMove = { source: move.source, destination: castledKing }
-            let towerMove = { source: destinationTower, destination: castledTower}
-            return this.castle(state, kingMove, towerMove);
+            let RookMove = { source: destinationRook, destination: castledRook}
+            return this.castle(state, kingMove, RookMove, colorPiece);
         }
 
         return this.nextOrInvalidResult(move, state);
@@ -114,31 +128,31 @@ export class CastlingRule extends Rule {
         return move.dx > 0 ? true : false; //works for whites but not for blacks
     }
 
-    // both castling will return needed information like the position of the tower destination or the new state
+    // both castling will return needed information like the position of the Rook destination or the new state
     private shortCastling(){
         console.log('short castling');
-        let destinationTower = this.defaultPositions.whiteRightTower;
-        let castledTower = this.defaultPositions.whiteTowerShortCastling;
-        let castledKing = this.defaultPositions.whiteKingShortCastling;
-        return [destinationTower,castledTower,castledKing];
+        let destinationRook = this.defaultPositions.whiteRightRook;
+        let castledRook = this.defaultRookPositions.whiteRookShortCastling;
+        let castledKing = this.defaultKingPositions.whiteKingShortCastling;
+        return [destinationRook,castledRook,castledKing];
     }
     private longCastling(){
         console.log('long castling');
-        let destinationTower = this.defaultPositions.whiteLeftTower;
-        let castledTower = this.defaultPositions.whiteTowerLongCastling;
-        let castledKing = this.defaultPositions.whiteKingLongCastling;
-        return [destinationTower,castledTower,castledKing];
+        let destinationRook = this.defaultPositions.whiteLeftRook;
+        let castledRook = this.defaultRookPositions.whiteRookLongCastling;
+        let castledKing = this.defaultKingPositions.whiteKingLongCastling;
+        return [destinationRook,castledRook,castledKing];
     }
 
-    private castle(state:GameState,moveKing: IMove, moveTower: IMove){
+    private castle(state:GameState,moveKing: IMove, moveRook: IMove, colorPiece: PieceColor){
         let nextState = state.clone();
         let mk = new Move(moveKing);
-        let mt = new Move(moveTower);
+        let mt = new Move(moveRook);
         nextState.board.move(mk);
         nextState.board.move(mt);
         nextState.history.push(mt); 
         // how are flags handled? caslted end game and all that? should improve this in some place
-        this.castled = true; // will be replaced for valid:true state: castledState
+        this.castlingFlags[colorPiece].castled = true; // will be replaced for valid:true state: castledState
         console.log('king Castled!');
         return {
           valid: true,
