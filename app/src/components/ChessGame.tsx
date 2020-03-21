@@ -95,9 +95,7 @@ export class ChessGame extends React.Component<ChessGameProps, ChessGameState> {
         source: this.state.sourceSquare,
         destination: { row: row, column: col }
       };
-      if (this.props.engine.isValidMove(move)) {
-        this.props.engine.move(move);
-      }
+      this.props.engine.move(move);
       this.setState({...this.state, sourceSquare: null });
     }
   };
