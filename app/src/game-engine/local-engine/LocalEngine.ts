@@ -98,8 +98,8 @@ export class LocalEngine extends ChessGameEngine {
   }
 
   private setupRulesPipeline(): void {
-    // this._pipeline.push(new CheckRule());
-    // this._pipeline.push(new GameEndedRule());
+    this._pipeline.push(new CheckRule());
+    this._pipeline.push(new GameEndedRule());
     this._pipeline.push(new TurnsRule());
     this._pipeline.push(new CastlingRule());
     this._pipeline.push(new KingMovementRule());
