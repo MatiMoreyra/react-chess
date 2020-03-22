@@ -55,6 +55,7 @@ export class LocalEngine extends ChessGameEngine {
   }
 
   public move(move: IMove): boolean {
+    console.log('called move with move:\n',move);
     let evaluation = this._pipeline.evaluate(new Move(move), this._state);
     if (evaluation.valid && evaluation.nextState !== undefined) {
       this._stateHisory.push(this._state);
@@ -96,10 +97,10 @@ export class LocalEngine extends ChessGameEngine {
   }
 
   private setupRulesPipeline(): void {
-    this._pipeline.push(new GameEndedRule());
+    // this._pipeline.push(new CheckRule());
+    // this._pipeline.push(new GameEndedRule());
     this._pipeline.push(new TurnsRule());
     this._pipeline.push(new CastlingRule());
-    this._pipeline.push(new CheckRule());
     this._pipeline.push(new KingMovementRule());
     this._pipeline.push(new PawnShortMovementRule());
     this._pipeline.push(new PawnLongMovementRule());

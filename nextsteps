@@ -1,32 +1,6 @@
-NEXT STEP:
-* THINK THE FOR LOOP ON THE EMPTY SPACES:
-EASY WAY TO THINK IT? CAN NOT ACCEPT HALF AN HOUR TESTING IT TO WORK...
-
-* achieve the castling movement -> decide better nomeclature
-* capture the king move, it must be to the specific destination in order to shoot castle. 
-* this can be used to shortcut the pipe line, and for updatingthe state ( this is wrong handled now)
-* pop the stashed changes and move flags to the state
-* changed the state logic for the history. Need to be a history of states not of moves
-* add is path on check -> improve the check rule in order to do this
-
-PROVIDE A WAY OF INITIALIZING THE GAME IN A ARBITRARY STATE, SO I CAN TEST THE CASTLING EASIER 
-
-FOUND PROBLEM: CHECK RULES EVALUATES ALL THE RULES WITH ALL THE PIECES TO DETERMINE IF THE PIECES CAN MOVE TO THE KING.
-
-2 THINGS COME FROM HERE:
-WE CAN MAKE THE CHECK RULE ACCEPT A PIECE, OR A SQUARE, AND REUSE THE LOGIC OF CHESS
-
-SECOND, FIND A BETTER PLACE TO PUT THE CASTLING
-
-
-IMPROVE CHECK:
-* CALL MOVING RULES WITH THE OPPOSITE LIVING PIECES ( WITHOUT THE KING ) -> IT WILL CALL THE 7 MOVEMENT RULES FOR THE (MAX) 7 PIECES,
-BUT IT WILL ONLY EVALUATE THEM WHEN THE PIECE IS THE CORRECT, THAT IS, VERIFY THAT PAWN IS MAKING CHECK BY VERIFTING THAT THE OPPOSITE PAWNS
-CAN MOVE TO THE KING
-
-* COULD MAKE MOVING RULES ACCEPT A PIECE, AND WE CAN THAT WAY STOP CHECKING IF THE PIECE THAT FELT INTO THE RULE IS THE MATCHING ONE
-( THAT IS, VERIFIY PAWN MOVEMENT IF THE MOVE,SOURCE IS A PAWN..)
-
-* WE CAN REUSE THE CHECKRULE IF WE PASS IT AN ARGUMENT TELLING WHERE DO WE CANT TO EVALUATE THE CHECK
-** ONE OPTION IS EVALUATE IT ON THE KINGS POSITION
-** OTHERS OPTIONS IS EVALUATE IT HERE ( INBETWEEN KING AND ROOKS FOR BOTH CASTLING)
+Next Steps:
+* refactor the empty spaces ? before or after the next one
+* refactor default - rook - king positions -> save only the columns
+* create a movement pipeline and a general pipeline, castle rule apart
+* refactor the on check and the end game rules to call only the movement pipeline
+* move the flags to the GameState
