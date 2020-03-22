@@ -8,27 +8,6 @@ import { ISquare } from "../../ISquare";
 import { map } from 'rxjs/operators';
 
 
-//rule must be before king rule, because it will allow the king 2 spaces
-
-// this should check many rules
-// I think the best way to iplement this rule is to make an inner pipeline of rules
-
-
-// king and Rook must have never moved before -done
-// there must be empty spaces between the 2 pieces -done (refactorize it using already board function)
-// castling zone must no be under attack ( like an invisible line trying to check )
-// king can't be under check (NOR THE SPACES BETWEEN KING AND ROOK) same above
-
-
-// states:
-// castled: boolean -> do not check the rule if already castled - done
-// once castled or having one of the 2 pieces moved -done
-
-// white and black logic: coluumns are the same for both -> take the source of the king. if It's never moved
-// then it has the row of the initial state , 0 or 7
-// need two flags for the states -?black castled, white castled..i
-
-
 enum castlingFlags {
     castled,
     kingMoved,
@@ -39,9 +18,9 @@ enum castlingFlags {
 export class CastlingRule extends Rule {
 
     private castlingPieces:string[] = ["King","Rook"];
-    // this code should be improved/optimized -> use interfaces ?
-    // this array strictly depends on the indexes for PieceColor, 0 for Black and 1 for White.
-    // need to remove this dependency
+    // this array should be improved/optimized -> use interfaces ?
+    // it strictly depends on the indexes for PieceColor, 0 for Black and 1 for White.
+    // may need to remove this dependency ?
     private piecesFixedPositions = [
         {
             initialRookShortCastling: { row: 0, column: 7 },
@@ -60,10 +39,9 @@ export class CastlingRule extends Rule {
             finalRookLongCastling: { row: 7, column: 3 }
         }
     ]
-    private allowedKingCols = [6,2];
+    private allowedKingCols = [6,2]; // cols that shoot the castling king movement
 
     public evaluate(move: Move, state: GameState): RuleEvaluationResult {
-
         let movingPiece = state.board.getPiece(move.source);
         if (!!movingPiece){
             if (!this.castlingPieces.includes(movingPiece.type)) {
@@ -74,19 +52,20 @@ export class CastlingRule extends Rule {
             if (state.castlingFlags[pieceColor][castlingFlags.castled] || state.castlingFlags[pieceColor][castlingFlags.kingMoved]){
                 return this.nextOrInvalidResult(move, state);
             }
-
-            // if the moving piece is the rook, set the flag and continue the pipeline
-            // if it is the king, proceed with the evaluation
             return movingPiece.type === PieceType.King ? this.proceedForKing(move,state,pieceColor): this.proceedForRoot(move, state, pieceColor);
         }
         return { valid: false };
     }
 
-    private proceedForKing(move: Move, state: GameState, pieceColor: PieceColor){    
-
+    private proceedForKing(move: Move, state: GameState, pieceColor: PieceColor){   
         if(!this.allowedKingCols.includes(move.destination.column)){
-            return this.nextOrInvalidResult(move, state);
+            let result = this.nextOrInvalidResult(move, state);
+            if (result.nextState&&result.valid){
+                result.nextState.castlingFlags[pieceColor][castlingFlags.kingMoved] = true;
+            }
+            return result;
         }
+
         let shortCastling = this.isKingShortCastling(move);
         let alreadyMovedTower = shortCastling ?
         state.castlingFlags[pieceColor][castlingFlags.shortCastlingRookMoved]:
@@ -114,11 +93,14 @@ export class CastlingRule extends Rule {
     }
 
     private proceedForRoot(move: Move, state: GameState, pieceColor: PieceColor){
-        let shortOrLongCastling = 
-        this.isRootShortCastling(move) ?
-        state.castlingFlags[pieceColor][castlingFlags.shortCastlingRookMoved] = true:
-        state.castlingFlags[pieceColor][castlingFlags.longCastlingRookMoved] = true;
-        return this.nextOrInvalidResult(move, state);
+        let result = this.nextOrInvalidResult(move, state);
+        if (result.nextState&&result.valid){
+            let shortOrLongCastling = 
+            this.isRootShortCastling(move) ?
+            result.nextState.castlingFlags[pieceColor][castlingFlags.shortCastlingRookMoved] = true:
+            result.nextState.castlingFlags[pieceColor][castlingFlags.longCastlingRookMoved] = true;
+        }
+        return result;
     }
 
     private emptySpaces(fakeMove: Move, state:GameState): boolean{
@@ -126,11 +108,9 @@ export class CastlingRule extends Rule {
         for(initCol; 0 < endCol-initCol; initCol++){
             let resultGetPiece= state.board.getPiece({ row: fakeMove.source.row, column: initCol });
             if(!!resultGetPiece){
-                console.log("pieces between the king and rook");
                 return false;
             }
         }
-        console.log("empty spaces");
         return true;
     }
 
@@ -155,7 +135,7 @@ export class CastlingRule extends Rule {
         return move.source.column == 7;
     }
 
-    // both castling will return needed information like the position of the Rook destination or the new state
+    // both castling functions return needed information like the position of the Rook destination or the new state
     private shortCastling(pieceColor: PieceColor){
         console.log('short castling');
         let destinationRook = this.piecesFixedPositions[pieceColor].initialRookShortCastling
@@ -163,6 +143,7 @@ export class CastlingRule extends Rule {
         let castledKing = this.piecesFixedPositions[pieceColor].finalKingShortCastling;
         return [destinationRook,castledRook,castledKing];
     }
+
     private longCastling(pieceColor: PieceColor){
         console.log('long castling');
         let destinationRook = this.piecesFixedPositions[pieceColor].initialRookLongCastling
@@ -175,7 +156,6 @@ export class CastlingRule extends Rule {
         let nextState = state.clone();
         nextState.board.move(moveKing);
         nextState.board.move(moveRook);
-        // this flag should be on the game state
         nextState.history.push(moveRook); 
         nextState.castlingFlags[pieceColor][castlingFlags.castled] = true;
         console.log('king Castled!');

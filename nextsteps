@@ -1,6 +1,0 @@
-Next Steps:
-* refactor the empty spaces ? before or after the next one
-* refactor default - rook - king positions -> save only the columns
-* create a movement pipeline and a general pipeline, castle rule apart
-* refactor the on check and the end game rules to call only the movement pipeline
-* move the flags to the GameState
