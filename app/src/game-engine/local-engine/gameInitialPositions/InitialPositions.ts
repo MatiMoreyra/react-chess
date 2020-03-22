@@ -5,5 +5,6 @@ export enum GameInitialPositions {
     BlackShortCastlingTest = "4k2r/4pppp/8/8/8/8/8/8",
     BlackAndWhiteValidCastling = "r3k2r/pppppppp/8/8/8/8/4PPPP/R3K2R",
     WhiteShortCastlingNotEmptySpaces = "8/pppppppp/8/8/8/8/4PPPP/RN2K1NR",
+    QuickCheckMate = "k7/6R1/7R/8/8/8/8/7K"
 }
   
