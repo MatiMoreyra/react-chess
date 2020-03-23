@@ -1,12 +1,8 @@
 import { Rule, RuleEvaluationResult } from "../Rule";
 import { GameState } from "../GameState";
 import { Move } from "../extensions/Move";
-import { Square } from "../extensions/Square";
 import { IMove } from "../../IMove";
 import { PieceType, PieceColor } from "../../IPiece";
-import { ISquare } from "../../ISquare";
-import { map } from 'rxjs/operators';
-
 
 enum castlingFlags {
     castled,
@@ -84,7 +80,7 @@ export class CastlingRule extends Rule {
             destination: destinationRook
         };
 
-        if (this.emptySpaces(new Move(fakeMove), state)){
+        if (state.board.isPathFree(new Move(fakeMove))){
             let kingMove = new Move({source: move.source, destination: castledKing});
             let RookMove = new Move({source: destinationRook, destination: castledRook})
             return this.castle(state, kingMove, RookMove, pieceColor);
@@ -101,30 +97,6 @@ export class CastlingRule extends Rule {
             result.nextState.castlingFlags[pieceColor][castlingFlags.longCastlingRookMoved] = true;
         }
         return result;
-    }
-
-    private emptySpaces(fakeMove: Move, state:GameState): boolean{
-        let [initCol,endCol]=this.initIndexes(fakeMove);
-        for(initCol; 0 < endCol-initCol; initCol++){
-            let resultGetPiece= state.board.getPiece({ row: fakeMove.source.row, column: initCol });
-            if(!!resultGetPiece){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private initIndexes(move: Move):number[]{
-        var startIndex:number;
-        var endIndex:number;
-        if (move.dx>0){
-            startIndex = move.source.column +1;
-            endIndex = move.destination.column;
-        }else{
-            startIndex = move.destination.column + 1;  
-            endIndex = move.source.column;
-        }
-        return [startIndex,endIndex];
     }
 
     private isKingShortCastling(move: Move):boolean{
