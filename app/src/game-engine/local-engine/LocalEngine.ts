@@ -29,7 +29,7 @@ export class LocalEngine extends ChessGameEngine {
   private _stateHistory: Array<GameState>;
   constructor() {
     super();
-    let pieces = parseFen(GamePositions["CastlingKingOnCheck"]);
+    let pieces = parseFen(GamePositions["Default"]);
     if (pieces == null) {
       throw new Error("Invalid fen");
     }
