@@ -14,8 +14,7 @@ enum castlingFlags {
 export class CastlingRule extends Rule {
 
     private castlingPieces:string[] = ["King","Rook"];
-    // this array should be improved/optimized -> use interfaces ?
-    // it strictly depends on the indexes for PieceColor, 0 for Black and 1 for White.
+    // next array strictly depends on the indexes for PieceColor, 0 for Black and 1 for White.
     // may need to remove this dependency ?
     private piecesFixedPositions = [
         {
@@ -83,7 +82,6 @@ export class CastlingRule extends Rule {
 
         if (state.board.isPathFree(fakeMove) && !state.onCheck &&
             !this.isPathThreatened(state, pieceColor, fakeMove)){
-            debugger;
             let kingMove = new Move({source: move.source, destination: castledKing});
             let RookMove = new Move({source: destinationRook, destination: castledRook})
             return this.castle(state, kingMove, RookMove, pieceColor);
@@ -112,7 +110,6 @@ export class CastlingRule extends Rule {
 
     // both castling functions return needed information like the position of the Rook destination or the new state
     private shortCastling(pieceColor: PieceColor){
-        console.log('short castling');
         let destinationRook = this.piecesFixedPositions[pieceColor].initialRookShortCastling
         let castledRook = this.piecesFixedPositions[pieceColor].finalRookShortCastling;
         let castledKing = this.piecesFixedPositions[pieceColor].finalKingShortCastling;
@@ -120,7 +117,6 @@ export class CastlingRule extends Rule {
     }
 
     private longCastling(pieceColor: PieceColor){
-        console.log('long castling');
         let destinationRook = this.piecesFixedPositions[pieceColor].initialRookLongCastling
         let castledRook = this.piecesFixedPositions[pieceColor].finalRookLongCastling;
         let castledKing = this.piecesFixedPositions[pieceColor].finalKingLongCastling;
@@ -133,7 +129,6 @@ export class CastlingRule extends Rule {
         nextState.board.move(moveRook);
         nextState.history.push(moveRook); 
         nextState.castlingFlags[pieceColor][castlingFlags.castled] = true;
-        console.log('king Castled!');
         return {
           valid: true,
           nextState: nextState
