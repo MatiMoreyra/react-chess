@@ -19,7 +19,6 @@ export class CheckRule extends Rule {
         state.currentTurn === PieceColor.White
           ? PieceColor.Black
           : PieceColor.White;
-
       result.nextState.onCheck = this.isChecked(result.nextState, nextTurn);
     }
     return result;

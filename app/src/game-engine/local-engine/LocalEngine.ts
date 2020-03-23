@@ -21,7 +21,7 @@ import { EnPassantRule } from "./rules/EnPassantRule";
 import { Piece } from "./extensions/Piece";
 import { CheckRule } from "./rules/CheckRule";
 import { GameEndedRule } from "./rules/GameEndedRule";
-import { GameInitialPositions } from "./gameInitialPositions/InitialPositions"
+import { GamePositions } from "./gameInitialPositions/InitialPositions"
 
 export class LocalEngine extends ChessGameEngine {
   private _state: GameState;
@@ -29,7 +29,7 @@ export class LocalEngine extends ChessGameEngine {
   private _stateHistory: Array<GameState>;
   constructor() {
     super();
-    let pieces = parseFen(GameInitialPositions["WhiteShortCastlingNotEmptySpaces"]);
+    let pieces = parseFen(GamePositions["CastlingKingOnCheck"]);
     if (pieces == null) {
       throw new Error("Invalid fen");
     }

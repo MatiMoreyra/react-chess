@@ -1,7 +1,7 @@
 import { Rule, RuleEvaluationResult } from "../Rule";
 import { GameState } from "../GameState";
 import { Move } from "../extensions/Move";
-import { IMove } from "../../IMove";
+import { ISquare } from "../../ISquare";
 import { PieceType, PieceColor } from "../../IPiece";
 
 enum castlingFlags {
@@ -53,6 +53,7 @@ export class CastlingRule extends Rule {
         return { valid: false };
     }
 
+
     private proceedForKing(move: Move, state: GameState, pieceColor: PieceColor){   
         if(!this.allowedKingCols.includes(move.destination.column)){
             let result = this.nextOrInvalidResult(move, state);
@@ -75,12 +76,14 @@ export class CastlingRule extends Rule {
         this.shortCastling(pieceColor):
         this.longCastling(pieceColor);
 
-        let fakeMove : IMove = {
+        let fakeMove = new Move({
             source: move.source,
             destination: destinationRook
-        };
+        });
 
-        if (state.board.isPathFree(new Move(fakeMove))){
+        if (state.board.isPathFree(fakeMove) && !state.onCheck &&
+            !this.isPathThreatened(state, pieceColor, fakeMove)){
+            debugger;
             let kingMove = new Move({source: move.source, destination: castledKing});
             let RookMove = new Move({source: destinationRook, destination: castledRook})
             return this.castle(state, kingMove, RookMove, pieceColor);
@@ -135,5 +138,39 @@ export class CastlingRule extends Rule {
           valid: true,
           nextState: nextState
         };
+    }
+
+    private isPathThreatened(state: GameState, color: PieceColor, move: Move):boolean{
+        let advance = 1;
+        while (advance < Math.abs(move.dx) || advance < Math.abs(move.dy)) {
+        let col = move.source.column + advance * Math.sign(move.dx);
+        let row = move.source.row + advance * Math.sign(move.dy);
+        if (this.isSquareThreatened(state, color, {  row: row, column: col })) {
+            return true;
+        }
+        advance++;
+        }
+        return false;
+    }     
+
+    private isSquareThreatened(state: GameState, color: PieceColor, square: ISquare){
+        //check if any opposite piece can reach the square
+        for (let row = 0; row < 8; row++) {
+            for (let column = 0; column < 8; column++) {
+              let source: ISquare = { row: row, column: column };
+              let piece = state.board.getPiece(source);
+              if (piece && piece.color !== color) {
+                let move: Move = new Move({
+                  source: source,
+                  destination: square
+                });
+                let result = this.nextOrInvalidResult(move, state);
+                if (result.valid) {
+                  return true;
+                }
+              }
+            }
+          }
+          return false;
     }
 }   
