@@ -7,6 +7,7 @@ import { GameState } from "./GameState";
 import { Board } from "./extensions/Board";
 import { TurnsRule } from "./rules/TurnsRule";
 import { KingMovementRule } from "./rules/KingMovementRule";
+import { CastlingRule } from "./rules/CastlingRule";
 import { PawnShortMovementRule } from "./rules/PawnShortMovementRule";
 import { PawnLongMovementRule } from "./rules/PawnLongMovementRule";
 import { PawnCaptureMovementRule } from "./rules/PawnCaptureMovementRule";
@@ -20,14 +21,15 @@ import { EnPassantRule } from "./rules/EnPassantRule";
 import { Piece } from "./extensions/Piece";
 import { CheckRule } from "./rules/CheckRule";
 import { GameEndedRule } from "./rules/GameEndedRule";
+import { GamePositions } from "./gameInitialPositions/InitialPositions"
 
 export class LocalEngine extends ChessGameEngine {
   private _state: GameState;
   private _pipeline: RulesPipeline;
-  private _stateHisory: Array<GameState>;
+  private _stateHistory: Array<GameState>;
   constructor() {
     super();
-    let pieces = parseFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+    let pieces = parseFen(GamePositions["Default"]);
     if (pieces == null) {
       throw new Error("Invalid fen");
     }
@@ -37,11 +39,13 @@ export class LocalEngine extends ChessGameEngine {
       new Array<Move>(),
       new Array<Piece>(),
       false,
-      GameResult.Open
+      GameResult.Open,
+      [[false,false,false,false],
+      [false,false,false,false]]
     );
     this._pipeline = new RulesPipeline();
     this.setupRulesPipeline();
-    this._stateHisory = new Array<GameState>();
+    this._stateHistory = new Array<GameState>();
   }
 
   public getChessBoard(): IBoard {
@@ -55,7 +59,7 @@ export class LocalEngine extends ChessGameEngine {
   public move(move: IMove): boolean {
     let evaluation = this._pipeline.evaluate(new Move(move), this._state);
     if (evaluation.valid && evaluation.nextState !== undefined) {
-      this._stateHisory.push(this._state);
+      this._stateHistory.push(this._state);
       this._state = evaluation.nextState;
       if (this._state.result !== GameResult.Open) {
         if (this.onGameEnded !== undefined) {
@@ -80,23 +84,24 @@ export class LocalEngine extends ChessGameEngine {
   }
 
   public undoMove(): void {
-    let lastState = this._stateHisory.pop();
+    let lastState = this._stateHistory.pop();
     if (lastState) {
       this._state = lastState;
     }
   }
 
   public restart(): void {
-    if (this._stateHisory.length !== 0) {
-      this._state = this._stateHisory[0];
-      this._stateHisory = new Array<GameState>();
+    if (this._stateHistory.length !== 0) {
+      this._state = this._stateHistory[0];
+      this._stateHistory = new Array<GameState>();
     }
   }
 
   private setupRulesPipeline(): void {
+    this._pipeline.push(new CheckRule());
     this._pipeline.push(new GameEndedRule());
     this._pipeline.push(new TurnsRule());
-    this._pipeline.push(new CheckRule());
+    this._pipeline.push(new CastlingRule());
     this._pipeline.push(new KingMovementRule());
     this._pipeline.push(new PawnShortMovementRule());
     this._pipeline.push(new PawnLongMovementRule());

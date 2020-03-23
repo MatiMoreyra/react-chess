@@ -11,6 +11,7 @@ export class GameState {
   public capturedPieces: Array<Piece>;
   public onCheck: boolean;
   public result: GameResult;
+  public castlingFlags: boolean[][];
 
   constructor(
     board: Board,
@@ -18,7 +19,8 @@ export class GameState {
     history: Array<Move>,
     capturedPieces: Array<Piece>,
     onCheck: boolean,
-    result: GameResult
+    result: GameResult,
+    castlingFlags: boolean[][]
   ) {
     this.board = board;
     this.currentTurn = currentTurn;
@@ -26,6 +28,7 @@ export class GameState {
     this.capturedPieces = capturedPieces;
     this.onCheck = onCheck;
     this.result = result;
+    this.castlingFlags = castlingFlags;
   }
 
   // Deep copy
@@ -39,13 +42,23 @@ export class GameState {
     this.capturedPieces.forEach(p => {
       clonedCapturedPieces.push(p.clone());
     });
+    let clonedCastlingFlags:boolean[][] = [];
+    this.castlingFlags.forEach(flags => {
+      let newFlags: boolean[]=[];
+      flags.forEach(flag=>{
+        newFlags.push(flag);
+      })
+      clonedCastlingFlags.push(newFlags);
+    })
+
     return new GameState(
       clonedBoard,
       this.currentTurn,
       clonedHistory,
       clonedCapturedPieces,
       this.onCheck,
-      this.result
+      this.result,
+      clonedCastlingFlags
     );
   }
 }
