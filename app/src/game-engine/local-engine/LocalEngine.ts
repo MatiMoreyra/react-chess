@@ -20,6 +20,7 @@ import { EnPassantRule } from "./rules/EnPassantRule";
 import { Piece } from "./extensions/Piece";
 import { CheckRule } from "./rules/CheckRule";
 import { GameEndedRule } from "./rules/GameEndedRule";
+import { GamePositions } from "./gameInitialPositions/InitialPositions";
 
 export class LocalEngine extends ChessGameEngine {
   private _state: GameState;
@@ -27,7 +28,7 @@ export class LocalEngine extends ChessGameEngine {
   private _stateHisory: Array<GameState>;
   constructor() {
     super();
-    let pieces = parseFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+    let pieces = parseFen(GamePositions["Default"]);
     if (pieces == null) {
       throw new Error("Invalid fen");
     }
