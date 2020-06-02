@@ -8,7 +8,7 @@ export class EnPassantRule extends Rule {
   public evaluate(move: Move, state: GameState): RuleEvaluationResult {
     let movingPiece = state.board.getPiece(move.source);
 
-    // If the moving piece is not a king, just delegate the evaluation to the
+    // If the moving piece is not a pawn, just delegate the evaluation to the
     // next rule (if exists).
     if (!movingPiece || movingPiece.type !== PieceType.Pawn) {
       return this.nextOrInvalidResult(move, state);
@@ -31,11 +31,11 @@ export class EnPassantRule extends Rule {
 
       let frontSquare = new Square({
         column: move.destination.column,
-        row: move.destination.row + validDy
+        row: move.destination.row + validDy,
       });
       let backSquare = new Square({
         column: move.destination.column,
-        row: move.destination.row - validDy
+        row: move.destination.row - validDy,
       });
       let pieceBehind = state.board.getPiece(backSquare);
       let lastMove = state.history[state.history.length - 1];
@@ -55,7 +55,7 @@ export class EnPassantRule extends Rule {
         nextState.board.setPiece(backSquare, null);
         return {
           valid: true,
-          nextState: nextState
+          nextState: nextState,
         };
       }
     }

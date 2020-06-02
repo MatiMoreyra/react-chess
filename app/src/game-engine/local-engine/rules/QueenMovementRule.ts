@@ -8,7 +8,7 @@ export class QueenMovementRule extends Rule {
   public evaluate(move: Move, state: GameState): RuleEvaluationResult {
     let movingPiece = state.board.getPiece(move.source);
 
-    // If the moving piece is not a king, just delegate the evaluation to the
+    // If the moving piece is not a queen, just delegate the evaluation to the
     // next rule (if exists).
     if (!movingPiece || movingPiece.type !== PieceType.Queen) {
       return this.nextOrInvalidResult(move, state);
@@ -38,7 +38,7 @@ export class QueenMovementRule extends Rule {
     }
     return {
       valid: true,
-      nextState: nextState
+      nextState: nextState,
     };
   }
 }

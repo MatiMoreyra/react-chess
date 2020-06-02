@@ -32,11 +32,11 @@ export class GameState {
   public clone(): GameState {
     let clonedBoard = this.board.clone();
     let clonedHistory = new Array<Move>();
-    this.history.forEach(m => {
+    this.history.forEach((m) => {
       clonedHistory.push(m);
     });
     let clonedCapturedPieces = new Array<Piece>();
-    this.capturedPieces.forEach(p => {
+    this.capturedPieces.forEach((p) => {
       clonedCapturedPieces.push(p.clone());
     });
     return new GameState(

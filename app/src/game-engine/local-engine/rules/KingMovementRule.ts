@@ -30,7 +30,7 @@ export class KingMovementRule extends Rule {
       }
       return {
         valid: true,
-        nextState: nextState
+        nextState: nextState,
       };
     }
 

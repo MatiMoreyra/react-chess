@@ -5,7 +5,7 @@ import { IMove } from "./IMove";
 export enum GameResult {
   CheckMate = "Checkmate",
   Draw = "Draw",
-  Open = "Open"
+  Open = "Open",
 }
 
 export abstract class ChessGameEngine {
