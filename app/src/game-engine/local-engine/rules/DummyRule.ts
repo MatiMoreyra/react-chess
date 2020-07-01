@@ -9,7 +9,7 @@ export class DummyRule extends Rule {
     nextState.history.push(move);
     return {
       valid: true,
-      nextState: nextState
+      nextState: nextState,
     };
   }
 }

@@ -1,6 +1,6 @@
 export enum PieceColor {
   Black,
-  White
+  White,
 }
 
 export enum PieceType {
@@ -9,7 +9,7 @@ export enum PieceType {
   Rook = "Rook",
   Bishop = "Bishop",
   Knight = "Knight",
-  Pawn = "Pawn"
+  Pawn = "Pawn",
 }
 
 export interface IPiece {

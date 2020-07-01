@@ -51,7 +51,7 @@ export class CheckRule extends Rule {
         if (piece && piece.color !== color) {
           let move: Move = new Move({
             source: source,
-            destination: kingSquare
+            destination: kingSquare,
           });
           let result = this.nextOrInvalidResult(move, state);
           if (result.valid) {

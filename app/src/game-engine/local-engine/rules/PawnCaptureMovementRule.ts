@@ -8,7 +8,7 @@ export class PawnCaptureMovementRule extends Rule {
   public evaluate(move: Move, state: GameState): RuleEvaluationResult {
     let movingPiece = state.board.getPiece(move.source);
 
-    // If the moving piece is not a king, just delegate the evaluation to the
+    // If the moving piece is not a pawn, just delegate the evaluation to the
     // next rule (if exists).
     if (!movingPiece || movingPiece.type !== PieceType.Pawn) {
       return this.next ? this.next.evaluate(move, state) : { valid: false };
@@ -38,7 +38,7 @@ export class PawnCaptureMovementRule extends Rule {
         nextState.capturedPieces.push(new Piece(pieceAtDestination));
         return {
           valid: true,
-          nextState: nextState
+          nextState: nextState,
         };
       }
     }
